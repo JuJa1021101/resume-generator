@@ -57,8 +57,13 @@ export const routes = [
   },
 ];
 
-// Create router instance
-export const router = createBrowserRouter(routes);
+// Create router instance with future flags
+export const router = createBrowserRouter(routes, {
+  future: {
+    v7_startTransition: true,
+    v7_relativeSplatPath: true,
+  },
+});
 
 // Router provider component
 export function AppRouter() {

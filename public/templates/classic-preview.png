@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="250" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="250" fill="#ffffff" stroke="#d1d5db" stroke-width="1"/>
+  <text x="100" y="30" font-family="Times, serif" font-size="16" fill="#1f2937" text-anchor="middle" font-weight="bold">Classic Template</text>
+  <line x1="20" y1="40" x2="180" y2="40" stroke="#6b7280" stroke-width="1"/>
+  <rect x="20" y="50" width="80" height="8" fill="#9ca3af" rx="2"/>
+  <rect x="20" y="65" width="120" height="6" fill="#d1d5db" rx="2"/>
+  <rect x="20" y="85" width="60" height="6" fill="#374151" rx="2"/>
+  <rect x="20" y="100" width="140" height="4" fill="#d1d5db" rx="2"/>
+  <rect x="20" y="110" width="100" height="4" fill="#d1d5db" rx="2"/>
+  <rect x="20" y="130" width="60" height="6" fill="#374151" rx="2"/>
+  <rect x="20" y="145" width="160" height="4" fill="#d1d5db" rx="2"/>
+  <rect x="20" y="155" width="120" height="4" fill="#d1d5db" rx="2"/>
+  <rect x="20" y="175" width="60" height="6" fill="#374151" rx="2"/>
+  <rect x="20" y="190" width="140" height="4" fill="#d1d5db" rx="2"/>
+  <rect x="20" y="200" width="80" height="4" fill="#d1d5db" rx="2"/>
+  <line x1="20" y1="220" x2="180" y2="220" stroke="#6b7280" stroke-width="1"/>
+</svg>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="250" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="250" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+  <rect x="20" y="20" width="160" height="30" fill="#3b82f6" rx="4"/>
+  <text x="100" y="40" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle" font-weight="bold">Modern Template</text>
+  <rect x="20" y="60" width="80" height="8" fill="#cbd5e1" rx="2"/>
+  <rect x="20" y="75" width="120" height="6" fill="#e2e8f0" rx="2"/>
+  <rect x="20" y="90" width="160" height="1" fill="#e2e8f0"/>
+  <rect x="20" y="105" width="60" height="6" fill="#64748b" rx="2"/>
+  <rect x="20" y="120" width="140" height="4" fill="#e2e8f0" rx="2"/>
+  <rect x="20" y="130" width="100" height="4" fill="#e2e8f0" rx="2"/>
+  <rect x="20" y="150" width="60" height="6" fill="#64748b" rx="2"/>
+  <rect x="20" y="165" width="160" height="4" fill="#e2e8f0" rx="2"/>
+  <rect x="20" y="175" width="120" height="4" fill="#e2e8f0" rx="2"/>
+  <rect x="20" y="195" width="60" height="6" fill="#64748b" rx="2"/>
+  <rect x="20" y="210" width="140" height="4" fill="#e2e8f0" rx="2"/>
+  <rect x="20" y="220" width="80" height="4" fill="#e2e8f0" rx="2"/>
+</svg>

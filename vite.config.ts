@@ -2,23 +2,27 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import path from 'path'
-import { getCDNConfig } from './config/cdn.config'
+// import { getCDNConfig } from './config/cdn.config'
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command, mode }) => {
-  const env = loadEnv(mode, process.cwd(), '');
-  const cdnConfig = getCDNConfig();
+export default defineConfig(({ mode }) => {
+  // const env = loadEnv(mode, process.cwd(), '');
+  // const cdnConfig = getCDNConfig();
 
   return {
     plugins: [
       react(),
       VitePWA({
         registerType: 'autoUpdate',
+        injectRegister: 'auto',
         workbox: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
           navigateFallback: '/index.html',
-          navigateFallbackDenylist: [/^\/_/, /\/[^/?]+\.[^/]+$/],
+          navigateFallbackDenylist: [/^\/_/, /\/[^/?]+\.[^/]+$/, /^\/api\//],
           offlineGoogleAnalytics: true,
+          cleanupOutdatedCaches: true,
+          skipWaiting: true,
+          clientsClaim: true,
           runtimeCaching: [
             // OpenAI API缓存
             {
@@ -83,13 +87,13 @@ export default defineConfig(({ command, mode }) => {
           start_url: '/',
           icons: [
             {
-              src: 'pwa-192x192.png',
+              src: '/pwa-192x192.png',
               sizes: '192x192',
               type: 'image/png',
               purpose: 'any maskable'
             },
             {
-              src: 'pwa-512x512.png',
+              src: '/pwa-512x512.png',
               sizes: '512x512',
               type: 'image/png',
               purpose: 'any maskable'
@@ -102,20 +106,21 @@ export default defineConfig(({ command, mode }) => {
               short_name: '新建',
               description: '创建新的简历分析',
               url: '/',
-              icons: [{ src: 'pwa-192x192.png', sizes: '192x192' }]
+              icons: [{ src: '/pwa-192x192.png', sizes: '192x192' }]
             },
             {
               name: '历史记录',
               short_name: '历史',
               description: '查看分析历史',
               url: '/history',
-              icons: [{ src: 'pwa-192x192.png', sizes: '192x192' }]
+              icons: [{ src: '/pwa-192x192.png', sizes: '192x192' }]
             }
           ]
         },
         devOptions: {
-          enabled: true
-        }
+          enabled: false // 在开发环境中禁用PWA以避免错误
+        },
+        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       })
     ],
     resolve: {

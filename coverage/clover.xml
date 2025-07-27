@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1753451064368" clover="3.2.0">
+  <project timestamp="1753451064368" name="All files">
+    <metrics statements="202" coveredstatements="118" conditionals="262" coveredconditionals="172" methods="74" coveredmethods="32" elements="538" coveredelements="322" complexity="0" loc="202" ncloc="202" packages="5" files="11" classes="11"/>
+    <package name="src">
+      <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <file name="App.tsx" path="D:\AI-project\resume-generator\src\App.tsx">
+        <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="10" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components">
+      <metrics statements="21" coveredstatements="0" conditionals="13" coveredconditionals="0" methods="10" coveredmethods="0"/>
+      <file name="ErrorBoundary.tsx" path="D:\AI-project\resume-generator\src\components\ErrorBoundary.tsx">
+        <metrics statements="13" coveredstatements="0" conditionals="9" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="93" count="0" type="stmt"/>
+      </file>
+      <file name="Layout.tsx" path="D:\AI-project\resume-generator\src\components\Layout.tsx">
+        <metrics statements="8" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.pages">
+      <metrics statements="12" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="6" coveredmethods="0"/>
+      <file name="AnalysisPage.tsx" path="D:\AI-project\resume-generator\src\pages\AnalysisPage.tsx">
+        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+      </file>
+      <file name="HistoryPage.tsx" path="D:\AI-project\resume-generator\src\pages\HistoryPage.tsx">
+        <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+      </file>
+      <file name="HomePage.tsx" path="D:\AI-project\resume-generator\src\pages\HomePage.tsx">
+        <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+      </file>
+      <file name="ResultsPage.tsx" path="D:\AI-project\resume-generator\src\pages\ResultsPage.tsx">
+        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.types">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="index.ts" path="D:\AI-project\resume-generator\src\types\index.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="src.utils">
+      <metrics statements="168" coveredstatements="118" conditionals="247" coveredconditionals="172" methods="57" coveredmethods="32"/>
+      <file name="cn.ts" path="D:\AI-project\resume-generator\src\utils\cn.ts">
+        <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="9" count="0" type="stmt"/>
+      </file>
+      <file name="serialization.ts" path="D:\AI-project\resume-generator\src\utils\serialization.ts">
+        <metrics statements="52" coveredstatements="34" conditionals="88" coveredconditionals="42" methods="35" coveredmethods="20"/>
+        <line num="19" count="20" type="stmt"/>
+        <line num="23" count="21" type="stmt"/>
+        <line num="28" count="8" type="stmt"/>
+        <line num="29" count="8" type="stmt"/>
+        <line num="31" count="2" type="stmt"/>
+        <line num="32" count="2" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="43" count="3" type="stmt"/>
+        <line num="44" count="3" type="stmt"/>
+        <line num="45" count="18" type="cond" truecount="4" falsecount="0"/>
+        <line num="46" count="16" type="stmt"/>
+        <line num="49" count="3" type="stmt"/>
+        <line num="55" count="2" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="66" count="2" type="stmt"/>
+        <line num="70" count="3" type="stmt"/>
+        <line num="71" count="3" type="stmt"/>
+        <line num="80" count="0" type="cond" truecount="2" falsecount="0"/>
+        <line num="92" count="3" type="stmt"/>
+        <line num="102" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="103" count="1" type="stmt"/>
+        <line num="119" count="3" type="stmt"/>
+        <line num="132" count="4" type="stmt"/>
+        <line num="140" count="4" type="stmt"/>
+        <line num="151" count="3" type="stmt"/>
+        <line num="159" count="3" type="stmt"/>
+        <line num="168" count="0" type="stmt"/>
+        <line num="176" count="0" type="stmt"/>
+        <line num="187" count="0" type="stmt"/>
+        <line num="195" count="0" type="stmt"/>
+        <line num="204" count="1" type="stmt"/>
+        <line num="209" count="1" type="stmt"/>
+        <line num="213" count="1" type="stmt"/>
+        <line num="214" count="1" type="stmt"/>
+        <line num="225" count="2" type="stmt"/>
+        <line num="236" count="2" type="stmt"/>
+        <line num="248" count="0" type="stmt"/>
+        <line num="262" count="0" type="stmt"/>
+        <line num="283" count="0" type="stmt"/>
+        <line num="287" count="0" type="stmt"/>
+        <line num="288" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="293" count="1" type="stmt"/>
+        <line num="298" count="1" type="stmt"/>
+        <line num="302" count="2" type="stmt"/>
+        <line num="303" count="2" type="stmt"/>
+        <line num="313" count="0" type="stmt"/>
+        <line num="317" count="0" type="stmt"/>
+        <line num="322" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="323" count="0" type="stmt"/>
+        <line num="325" count="0" type="stmt"/>
+        <line num="332" count="0" type="stmt"/>
+        <line num="337" count="0" type="stmt"/>
+      </file>
+      <file name="validation.ts" path="D:\AI-project\resume-generator\src\utils\validation.ts">
+        <metrics statements="115" coveredstatements="84" conditionals="159" coveredconditionals="130" methods="21" coveredmethods="12"/>
+        <line num="18" count="9" type="stmt"/>
+        <line num="19" count="9" type="stmt"/>
+        <line num="24" count="9" type="stmt"/>
+        <line num="25" count="9" type="stmt"/>
+        <line num="30" count="6" type="stmt"/>
+        <line num="31" count="6" type="stmt"/>
+        <line num="32" count="3" type="stmt"/>
+        <line num="34" count="3" type="stmt"/>
+        <line num="40" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="45" count="8" type="cond" truecount="3" falsecount="0"/>
+        <line num="50" count="2" type="stmt"/>
+        <line num="61" count="2" type="stmt"/>
+        <line num="67" count="2" type="stmt"/>
+        <line num="70" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="71" count="1" type="stmt"/>
+        <line num="78" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="79" count="1" type="stmt"/>
+        <line num="86" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="87" count="1" type="stmt"/>
+        <line num="94" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="95" count="1" type="stmt"/>
+        <line num="103" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="104" count="1" type="stmt"/>
+        <line num="105" count="0" type="stmt"/>
+        <line num="106" count="0" type="stmt"/>
+        <line num="107" count="0" type="stmt"/>
+        <line num="116" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="117" count="1" type="stmt"/>
+        <line num="118" count="0" type="stmt"/>
+        <line num="119" count="0" type="stmt"/>
+        <line num="120" count="0" type="stmt"/>
+        <line num="129" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="130" count="1" type="stmt"/>
+        <line num="131" count="0" type="stmt"/>
+        <line num="132" count="0" type="stmt"/>
+        <line num="133" count="0" type="stmt"/>
+        <line num="141" count="2" type="stmt"/>
+        <line num="146" count="2" type="stmt"/>
+        <line num="148" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="149" count="1" type="stmt"/>
+        <line num="156" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="157" count="1" type="stmt"/>
+        <line num="164" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="165" count="1" type="stmt"/>
+        <line num="172" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="173" count="1" type="stmt"/>
+        <line num="180" count="2" type="stmt"/>
+        <line num="185" count="2" type="stmt"/>
+        <line num="187" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="188" count="1" type="stmt"/>
+        <line num="195" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="196" count="1" type="stmt"/>
+        <line num="203" count="2" type="cond" truecount="3" falsecount="1"/>
+        <line num="204" count="0" type="stmt"/>
+        <line num="211" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="218" count="1" type="stmt"/>
+        <line num="225" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="226" count="1" type="stmt"/>
+        <line num="233" count="2" type="stmt"/>
+        <line num="238" count="2" type="stmt"/>
+        <line num="240" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="241" count="1" type="stmt"/>
+        <line num="248" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="249" count="1" type="stmt"/>
+        <line num="256" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="257" count="1" type="stmt"/>
+        <line num="264" count="2" type="cond" truecount="3" falsecount="1"/>
+        <line num="265" count="0" type="stmt"/>
+        <line num="272" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="279" count="1" type="stmt"/>
+        <line num="286" count="2" type="cond" truecount="5" falsecount="0"/>
+        <line num="287" count="1" type="stmt"/>
+        <line num="294" count="2" type="stmt"/>
+        <line num="299" count="3" type="stmt"/>
+        <line num="301" count="3" type="cond" truecount="4" falsecount="0"/>
+        <line num="302" count="1" type="stmt"/>
+        <line num="309" count="3" type="cond" truecount="4" falsecount="0"/>
+        <line num="310" count="1" type="stmt"/>
+        <line num="317" count="3" type="cond" truecount="4" falsecount="0"/>
+        <line num="318" count="1" type="stmt"/>
+        <line num="325" count="3" type="cond" truecount="4" falsecount="0"/>
+        <line num="326" count="1" type="stmt"/>
+        <line num="333" count="3" type="stmt"/>
+        <line num="338" count="0" type="stmt"/>
+        <line num="340" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="341" count="0" type="stmt"/>
+        <line num="348" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="349" count="0" type="stmt"/>
+        <line num="356" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="357" count="0" type="stmt"/>
+        <line num="364" count="0" type="stmt"/>
+        <line num="369" count="2" type="stmt"/>
+        <line num="371" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="372" count="1" type="stmt"/>
+        <line num="379" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="380" count="1" type="stmt"/>
+        <line num="387" count="2" type="cond" truecount="5" falsecount="0"/>
+        <line num="388" count="1" type="stmt"/>
+        <line num="395" count="2" type="cond" truecount="5" falsecount="0"/>
+        <line num="396" count="1" type="stmt"/>
+        <line num="403" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="404" count="1" type="stmt"/>
+        <line num="411" count="2" type="stmt"/>
+        <line num="416" count="0" type="stmt"/>
+        <line num="418" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="419" count="0" type="stmt"/>
+        <line num="426" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="427" count="0" type="stmt"/>
+        <line num="428" count="0" type="stmt"/>
+        <line num="429" count="0" type="stmt"/>
+        <line num="436" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="437" count="0" type="stmt"/>
+        <line num="444" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="445" count="0" type="stmt"/>
+        <line num="452" count="0" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

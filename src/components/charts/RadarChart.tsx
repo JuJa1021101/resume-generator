@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { Radar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -8,6 +8,8 @@ import {
   Filler,
   Tooltip,
   Legend,
+  ChartEvent,
+  ActiveElement,
 } from 'chart.js';
 import { motion } from 'framer-motion';
 import { RadarChartProps, ChartConfig, ChartTheme } from './types';
@@ -60,24 +62,35 @@ const RadarChart: React.FC<RadarChartComponentProps> = ({
   }
 
   // Generate chart options
-  const options = generateRadarOptions(
+  const baseOptions = generateRadarOptions(
     theme,
     config.interactive,
     config.animations && isVisible,
     maxValue
   );
 
-  // Add click handler
-  if (onDataPointClick) {
-    options.onClick = (event, elements) => {
+  // Create options with click handler and grid control
+  const options = {
+    ...baseOptions,
+    scales: {
+      ...baseOptions.scales,
+      r: {
+        ...baseOptions.scales.r,
+        grid: {
+          ...baseOptions.scales.r.grid,
+          display: showGrid,
+        },
+      },
+    },
+    onClick: onDataPointClick ? (_event: ChartEvent, elements: ActiveElement[]) => {
       if (elements.length > 0) {
         const element = elements[0];
         const dataIndex = element.index;
         const categoryScore = data.categoryScores[dataIndex];
         onDataPointClick(categoryScore);
       }
-    };
-  }
+    } : undefined,
+  } as const;
 
   // Handle export
   const handleExport = (format: 'png' | 'svg' | 'pdf') => {
@@ -105,7 +118,7 @@ const RadarChart: React.FC<RadarChartComponentProps> = ({
         <Radar
           ref={chartRef}
           data={chartData}
-          options={options}
+          options={options as any}
           width={dimensions?.width}
           height={dimensions?.height}
         />

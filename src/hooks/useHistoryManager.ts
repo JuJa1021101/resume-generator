@@ -83,7 +83,7 @@ export function useHistoryManager() {
 
   // Handle page refresh
   useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+    const handleBeforeUnload = () => {
       // Save current state before page refresh
       const currentState = {
         path: location.pathname,
@@ -125,9 +125,11 @@ export function useHistoryManager() {
       if (!shouldPrevent) return;
 
       const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+        const confirmationMessage = message || '您有未保存的更改，确定要离开吗？';
         event.preventDefault();
-        event.returnValue = message || '您有未保存的更改，确定要离开吗？';
-        return event.returnValue;
+        event.returnValue = confirmationMessage; // Required for some browsers
+        // Modern browsers ignore the return value and show their own dialog
+        return confirmationMessage;
       };
 
       window.addEventListener('beforeunload', handleBeforeUnload);

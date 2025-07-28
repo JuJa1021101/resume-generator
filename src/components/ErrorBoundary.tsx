@@ -1,6 +1,6 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
 import { ExclamationTriangleIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
-import { errorHandler, ErrorType, ErrorSeverity } from '../utils/error-handler';
+import { errorHandler } from '../utils/error-handler';
 import { networkHandler } from '../utils/network-handler';
 
 interface Props {

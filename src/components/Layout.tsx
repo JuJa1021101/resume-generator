@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
+import { NotificationManager } from './NotificationManager';
 import {
   HomeIcon,
   ChartBarIcon,
@@ -13,12 +14,7 @@ import { useUIStore } from '../stores/ui-store';
 import { useAppStore } from '../stores/app-store';
 import { useNavigation } from '../hooks/useNavigation';
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
-
-export const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const location = useLocation();
+export const Layout: React.FC = () => {
   const { sidebarOpen, setSidebarOpen, notifications } = useUIStore();
   const { theme, setTheme, language, setLanguage } = useAppStore();
   const { isCurrentPath } = useNavigation();
@@ -40,6 +36,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className={`min-h-screen ${theme === 'dark' ? 'dark bg-gray-900' : 'bg-gray-50'}`}>
+      <NotificationManager />
       {/* Header */}
       <header className={`${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} shadow-sm border-b`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -98,10 +95,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                       key={item.name}
                       to={item.href}
                       className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${isActive
-                          ? 'text-primary-600 bg-primary-50 dark:bg-primary-900/20'
-                          : theme === 'dark'
-                            ? 'text-gray-300 hover:text-white hover:bg-gray-700'
-                            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                        ? 'text-primary-600 bg-primary-50 dark:bg-primary-900/20'
+                        : theme === 'dark'
+                          ? 'text-gray-300 hover:text-white hover:bg-gray-700'
+                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                         }`}
                     >
                       <item.icon className="h-4 w-4 mr-2" />
@@ -140,10 +137,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                       to={item.href}
                       onClick={() => setSidebarOpen(false)}
                       className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${isActive
-                          ? 'text-primary-600 bg-primary-50 dark:bg-primary-900/20'
-                          : theme === 'dark'
-                            ? 'text-gray-300 hover:text-white hover:bg-gray-700'
-                            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                        ? 'text-primary-600 bg-primary-50 dark:bg-primary-900/20'
+                        : theme === 'dark'
+                          ? 'text-gray-300 hover:text-white hover:bg-gray-700'
+                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                         }`}
                     >
                       <item.icon className="h-5 w-5 mr-3" />
@@ -159,7 +156,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
       {/* Main Content */}
       <main className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20 md:pb-8 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-        {children}
+        <Outlet />
       </main>
 
       {/* Mobile Navigation */}
@@ -172,10 +169,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 key={item.name}
                 to={item.href}
                 className={`flex flex-col items-center py-2 px-1 ${isActive
-                    ? 'text-primary-600'
-                    : theme === 'dark'
-                      ? 'text-gray-400'
-                      : 'text-gray-600'
+                  ? 'text-primary-600'
+                  : theme === 'dark'
+                    ? 'text-gray-400'
+                    : 'text-gray-600'
                   }`}
               >
                 <item.icon className="h-5 w-5" />

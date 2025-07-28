@@ -5,23 +5,25 @@ import './index.css';
 
 // Register service worker for PWA using Vite PWA plugin
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
-  import('virtual:pwa-register').then(({ registerSW }) => {
-    const updateSW = registerSW({
-      onNeedRefresh() {
-        // Show a prompt to user to refresh the app
-        if (confirm('发现新版本，是否立即更新？')) {
-          updateSW(true);
-        }
-      },
-      onOfflineReady() {
-        console.log('应用已准备好离线使用');
-      },
-      onRegisterError(error) {
-        console.log('SW registration error', error);
-      },
+  window.addEventListener('load', () => {
+    import('virtual:pwa-register').then(({ registerSW }) => {
+      const updateSW = registerSW({
+        onNeedRefresh() {
+          // Show a prompt to user to refresh the app
+          if (confirm('发现新版本，是否立即更新？')) {
+            updateSW(true);
+          }
+        },
+        onOfflineReady() {
+          console.log('应用已准备好离线使用');
+        },
+        onRegisterError(error) {
+          console.error('SW registration error', error);
+        },
+      });
+    }).catch(error => {
+      console.error('PWA registration failed:', error);
     });
-  }).catch(error => {
-    console.log('PWA registration failed:', error);
   });
 }
 

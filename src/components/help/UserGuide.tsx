@@ -59,6 +59,15 @@ export const UserGuide: FC<UserGuideProps> = ({
     }
   }, [isOpen]);
 
+  // Cleanup highlighted element on unmount
+  useEffect(() => {
+    return () => {
+      if (highlightedElement) {
+        highlightedElement.classList.remove('guide-highlight');
+      }
+    };
+  }, [highlightedElement]);
+
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
@@ -185,24 +194,26 @@ export const UserGuide: FC<UserGuideProps> = ({
       </div>
 
       {/* Highlight styles */}
-      <style jsx global>{`
-        .guide-highlight {
-          position: relative;
-          z-index: 45;
-          box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.5);
-          border-radius: 4px;
-          animation: guide-pulse 2s infinite;
-        }
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          .guide-highlight {
+            position: relative !important;
+            z-index: 45 !important;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.5) !important;
+            border-radius: 4px !important;
+            animation: guide-pulse 2s infinite !important;
+          }
 
-        @keyframes guide-pulse {
-          0%, 100% {
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.5);
+          @keyframes guide-pulse {
+            0%, 100% {
+              box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.5) !important;
+            }
+            50% {
+              box-shadow: 0 0 0 8px rgba(59, 130, 246, 0.3) !important;
+            }
           }
-          50% {
-            box-shadow: 0 0 0 8px rgba(59, 130, 246, 0.3);
-          }
-        }
-      `}</style>
+        `
+      }} />
     </>
   );
 };

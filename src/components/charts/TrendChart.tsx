@@ -5,7 +5,6 @@ import { TrendChartProps, ChartConfig, ChartTheme, D3ChartData } from './types';
 import {
   createResponsiveSVG,
   createChartGroup,
-  createScales,
   createColorScale,
   createAxes,
   createGridLines,
@@ -48,7 +47,7 @@ const TrendChart: React.FC<TrendChartComponentProps> = ({
 
   // Transform data for trend visualization
   useEffect(() => {
-    const transformedData: D3ChartData[] = data.categoryScores.map((score, index) => ({
+    const transformedData: D3ChartData[] = data.categoryScores.map((score) => ({
       name: score.category,
       value: (score.score / score.maxScore) * 100,
       category: score.category,
@@ -96,13 +95,13 @@ const TrendChart: React.FC<TrendChartComponentProps> = ({
     const tooltip = createTooltip(containerRef.current, theme);
 
     // Create trend line data
-    const lineData = chartData.map((d, i) => [
+    const lineData: [number, number][] = chartData.map((d) => [
       (xScale(d.name) || 0) + xScale.bandwidth() / 2,
       yScale(d.value)
     ]);
 
     // Create line generator
-    const line = d3.line()
+    const lineGenerator = d3.line<[number, number]>()
       .x(d => d[0])
       .y(d => d[1])
       .curve(d3.curveMonotoneX);
@@ -114,6 +113,7 @@ const TrendChart: React.FC<TrendChartComponentProps> = ({
       const path = chartGroup.append('path')
         .datum(lineData)
         .attr('class', 'trend-line')
+        .attr('d', lineGenerator)
         .attr('fill', 'none')
         .attr('stroke', theme.colors.accent)
         .attr('stroke-width', 2)
@@ -145,7 +145,7 @@ const TrendChart: React.FC<TrendChartComponentProps> = ({
 
     // Animate bars
     bars.transition()
-      .delay((d, i) => i * 100)
+      .delay((_d, i) => i * 100)
       .duration(800)
       .ease(d3.easeBackOut)
       .attr('y', d => yScale(d.value))
@@ -169,7 +169,7 @@ const TrendChart: React.FC<TrendChartComponentProps> = ({
 
     // Animate labels
     labels.transition()
-      .delay((d, i) => i * 100 + 400)
+      .delay((_d, i) => i * 100 + 400)
       .duration(600)
       .style('opacity', 1);
 
@@ -200,7 +200,7 @@ const TrendChart: React.FC<TrendChartComponentProps> = ({
 
         hideTooltip(tooltip);
       })
-      .on('click', function (event, d) {
+      .on('click', function (_event, d) {
         if (onDataPointClick) {
           const categoryScore = data.categoryScores.find(score => score.category === d.category);
           if (categoryScore) {
@@ -218,14 +218,20 @@ const TrendChart: React.FC<TrendChartComponentProps> = ({
           category: score.category,
         }));
 
-        const compareLine = d3.line()
-          .x(d => (xScale(d.name) || 0) + xScale.bandwidth() / 2)
-          .y(d => yScale(d.value))
+        const compareLineData: [number, number][] = compareChartData.map((d) => [
+          (xScale(d.name) || 0) + xScale.bandwidth() / 2,
+          yScale(d.value)
+        ]);
+
+        const compareLineGenerator = d3.line<[number, number]>()
+          .x(d => d[0])
+          .y(d => d[1])
           .curve(d3.curveMonotoneX);
 
         chartGroup.append('path')
-          .datum(compareChartData)
+          .datum(compareLineData)
           .attr('class', `compare-line-${index}`)
+          .attr('d', compareLineGenerator)
           .attr('fill', 'none')
           .attr('stroke', theme.colors.secondary[index % theme.colors.secondary.length])
           .attr('stroke-width', 1.5)

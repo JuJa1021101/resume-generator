@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -8,6 +8,8 @@ import {
   Title,
   Tooltip,
   Legend,
+  ChartEvent,
+  ActiveElement,
 } from 'chart.js';
 import { motion } from 'framer-motion';
 import { BarChartProps, ChartConfig, ChartTheme } from './types';
@@ -44,7 +46,7 @@ const BarChart: React.FC<BarChartComponentProps> = ({
   orientation = 'vertical',
   showValues = true,
   groupBy = 'category',
-  sortBy = 'value',
+  sortBy = 'importance',
   onDataPointClick,
   onExport,
 }) => {
@@ -57,14 +59,16 @@ const BarChart: React.FC<BarChartComponentProps> = ({
   // Transform data based on groupBy option
   const chartData = groupBy === 'category'
     ? transformToCategoryComparison(data.categoryScores, theme)
-    : transformToBarData(data.gaps, theme, sortBy);
+    : transformToBarData(data.gaps, theme, sortBy as 'importance' | 'gap' | 'name');
 
   // Generate chart options
+  const baseOptions = generateChartOptions(theme, config.interactive, config.animations && isVisible);
+
   const options = {
-    ...generateChartOptions(theme, config.interactive, config.animations && isVisible),
+    ...baseOptions,
     indexAxis: orientation === 'horizontal' ? 'y' as const : 'x' as const,
     plugins: {
-      ...generateChartOptions(theme, config.interactive, config.animations && isVisible).plugins,
+      ...baseOptions.plugins,
       datalabels: showValues ? {
         display: true,
         color: theme.colors.text,
@@ -76,28 +80,23 @@ const BarChart: React.FC<BarChartComponentProps> = ({
       } : false,
     },
     scales: {
-      ...generateChartOptions(theme, config.interactive, config.animations && isVisible).scales,
+      ...baseOptions.scales,
       [orientation === 'horizontal' ? 'x' : 'y']: {
-        ...generateChartOptions(theme, config.interactive, config.animations && isVisible).scales?.y,
+        ...baseOptions.scales?.[orientation === 'horizontal' ? 'x' : 'y'],
         beginAtZero: true,
         max: groupBy === 'category' ? 100 : undefined,
         ticks: {
-          ...generateChartOptions(theme, config.interactive, config.animations && isVisible).scales?.y?.ticks,
+          ...baseOptions.scales?.[orientation === 'horizontal' ? 'x' : 'y']?.ticks,
           callback: function (value: any) {
             return groupBy === 'category' ? `${value}%` : value;
           },
         },
       },
     },
-  };
-
-  // Add click handler
-  if (onDataPointClick) {
-    options.onClick = (event, elements) => {
+    onClick: onDataPointClick ? (_event: ChartEvent, elements: ActiveElement[]) => {
       if (elements.length > 0) {
         const element = elements[0];
         const dataIndex = element.index;
-        const datasetIndex = element.datasetIndex;
 
         if (groupBy === 'category') {
           const categoryScore = data.categoryScores[dataIndex];
@@ -107,8 +106,8 @@ const BarChart: React.FC<BarChartComponentProps> = ({
           onDataPointClick(skillGap);
         }
       }
-    };
-  }
+    } : undefined,
+  } as const;
 
   // Handle export
   const handleExport = (format: 'png' | 'svg' | 'pdf') => {
@@ -136,7 +135,7 @@ const BarChart: React.FC<BarChartComponentProps> = ({
         <Bar
           ref={chartRef}
           data={chartData}
-          options={options}
+          options={options as any}
           width={dimensions?.width}
           height={dimensions?.height}
         />

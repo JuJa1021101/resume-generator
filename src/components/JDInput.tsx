@@ -89,7 +89,7 @@ export class JDProcessor {
     const title = titleMatch?.[1]?.trim();
 
     // Try to extract company - look for pattern like "公司：XXX" and extract only the company name
-    const companyMatch = cleanContent.match(/公司[:：]\s*([^\n]+)/);
+    const companyMatch = cleanContent.match(/公司[:：]\s*([^\n\r]+)/);
     const company = companyMatch?.[1]?.trim();
 
     // Extract key requirements (lines containing requirement keywords)
@@ -286,8 +286,8 @@ export const JDInput: React.FC<JDInputProps> = ({
   // Character count color based on usage
   const getCharCountColor = () => {
     const usage = state.charCount / maxLength;
-    if (usage > 0.9) return 'text-red-600';
-    if (usage > 0.7) return 'text-yellow-600';
+    if (usage >= 0.9) return 'text-red-600';
+    if (usage >= 0.7) return 'text-yellow-600';
     return 'text-gray-500';
   };
 

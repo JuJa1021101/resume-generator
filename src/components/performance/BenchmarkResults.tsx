@@ -140,7 +140,7 @@ export const BenchmarkResults: React.FC<BenchmarkResultsProps> = ({
       {/* Benchmark Results */}
       {!editMode ? (
         <div className="space-y-4">
-          {results.map((result, index) => (
+          {results.map((result) => (
             <div
               key={result.operation}
               className={`p-4 rounded-lg border ${getStatusColor(result.status)}`}
@@ -159,7 +159,7 @@ export const BenchmarkResults: React.FC<BenchmarkResultsProps> = ({
                 </div>
                 <div className="text-right">
                   <div className={`text-lg font-bold ${result.status === 'pass' ? 'text-green-600' :
-                      result.status === 'warning' ? 'text-yellow-600' : 'text-red-600'
+                    result.status === 'warning' ? 'text-yellow-600' : 'text-red-600'
                     }`}>
                     {result.status === 'pass' ? 'PASS' :
                       result.improvement > 0 ? `+${result.improvement.toFixed(1)}%` : 'OK'}
@@ -191,7 +191,7 @@ export const BenchmarkResults: React.FC<BenchmarkResultsProps> = ({
                     {/* Current value bar */}
                     <div
                       className={`h-full transition-all duration-300 ${result.status === 'pass' ? 'bg-green-500' :
-                          result.status === 'warning' ? 'bg-yellow-500' : 'bg-red-500'
+                        result.status === 'warning' ? 'bg-yellow-500' : 'bg-red-500'
                         }`}
                       style={{
                         width: `${Math.min(100, (result.current / (result.target * 2)) * 100)}%`

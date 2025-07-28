@@ -82,8 +82,8 @@ export const transformToBarData = (
       {
         label: '技能差距',
         data: gaps,
-        backgroundColor: theme.colors.primary[3] + '60', // Red with opacity
-        borderColor: theme.colors.primary[3],
+        backgroundColor: gaps.map(() => theme.colors.primary[3] + '60'), // Red with opacity
+        borderColor: gaps.map(() => theme.colors.primary[3]),
         borderWidth: 1,
         borderRadius: 4,
       },
@@ -163,7 +163,7 @@ export const generateChartOptions = (
   interactive: boolean = true,
   animations: boolean = true
 ) => {
-  return {
+  const baseOptions = {
     responsive: true,
     maintainAspectRatio: false,
     interaction: {
@@ -196,7 +196,7 @@ export const generateChartOptions = (
         titleFont: {
           family: theme.fonts.family,
           size: theme.fonts.size.medium,
-          weight: 'bold',
+          weight: 'bold' as const,
         },
         bodyFont: {
           family: theme.fonts.family,
@@ -232,10 +232,21 @@ export const generateChartOptions = (
         },
       },
     },
-    animation: animations ? {
-      duration: 1000,
-      easing: 'easeInOutQuart' as const,
-    } : false,
+  };
+
+  if (animations) {
+    return {
+      ...baseOptions,
+      animation: {
+        duration: 1000,
+        easing: 'easeInOutQuart' as const,
+      },
+    };
+  }
+
+  return {
+    ...baseOptions,
+    animation: false,
   };
 };
 
@@ -248,7 +259,7 @@ export const generateRadarOptions = (
 ) => {
   const baseOptions = generateChartOptions(theme, interactive, animations);
 
-  return {
+  const radarOptions = {
     ...baseOptions,
     scales: {
       r: {
@@ -276,6 +287,8 @@ export const generateRadarOptions = (
       },
     },
   };
+
+  return radarOptions;
 };
 
 // Debounce function for performance optimization

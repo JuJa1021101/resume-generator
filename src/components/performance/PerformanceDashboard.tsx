@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   PerformanceReport,
   PerformanceAlert,
-  PerformanceConfig,
-  PerformanceBenchmarkResult
+  PerformanceConfig
 } from '../../services/performance/types';
 import { performanceMonitor } from '../../services/performance/performance-monitor';
 import { PerformanceMetricsChart } from './PerformanceMetricsChart';
@@ -104,12 +103,12 @@ export const PerformanceDashboard: React.FC<PerformanceDashboardProps> = ({
   };
 
   const tabs = [
-    { id: 'overview', label: 'Overview', icon: '📊' },
-    { id: 'metrics', label: 'Metrics', icon: '📈' },
-    { id: 'benchmarks', label: 'Benchmarks', icon: '🎯' },
-    { id: 'alerts', label: 'Alerts', icon: '🚨', badge: alerts.length },
-    { id: 'config', label: 'Config', icon: '⚙️' }
-  ] as const;
+    { id: 'overview' as const, label: 'Overview', icon: '📊' },
+    { id: 'metrics' as const, label: 'Metrics', icon: '📈' },
+    { id: 'benchmarks' as const, label: 'Benchmarks', icon: '🎯' },
+    { id: 'alerts' as const, label: 'Alerts', icon: '🚨', badge: alerts.length },
+    { id: 'config' as const, label: 'Config', icon: '⚙️' }
+  ];
 
   if (loading) {
     return (
@@ -181,7 +180,7 @@ export const PerformanceDashboard: React.FC<PerformanceDashboardProps> = ({
               </div>
               <div className="text-right">
                 <div className={`text-3xl font-bold ${report.summary.performanceScore >= 80 ? 'text-green-600' :
-                    report.summary.performanceScore >= 60 ? 'text-yellow-600' : 'text-red-600'
+                  report.summary.performanceScore >= 60 ? 'text-yellow-600' : 'text-red-600'
                   }`}>
                   {report.summary.performanceScore}
                 </div>
@@ -229,15 +228,15 @@ export const PerformanceDashboard: React.FC<PerformanceDashboardProps> = ({
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`py-2 px-1 border-b-2 font-medium text-sm relative ${activeTab === tab.id
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
             >
               <span className="mr-2">{tab.icon}</span>
               {tab.label}
-              {tab.badge && tab.badge > 0 && (
+              {'badge' in tab && tab.badge && tab.badge > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {tab.badge > 99 ? '99+' : tab.badge}
+                  {'badge' in tab && tab.badge > 99 ? '99+' : 'badge' in tab ? tab.badge : 0}
                 </span>
               )}
             </button>

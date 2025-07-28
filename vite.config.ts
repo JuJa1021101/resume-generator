@@ -118,7 +118,8 @@ export default defineConfig(({ mode }) => {
           ]
         },
         devOptions: {
-          enabled: false // 在开发环境中禁用PWA以避免错误
+          enabled: false, // 在开发环境中禁用PWA以避免错误
+          type: 'module'
         },
         includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       })
@@ -192,8 +193,7 @@ export default defineConfig(({ mode }) => {
             }
           },
           // 文件命名策略
-          chunkFileNames: (chunkInfo) => {
-            const facadeModuleId = chunkInfo.facadeModuleId ? chunkInfo.facadeModuleId.split('/').pop() : 'chunk';
+          chunkFileNames: () => {
             return `assets/js/[name]-[hash].js`;
           },
           entryFileNames: 'assets/js/[name]-[hash].js',
@@ -213,7 +213,7 @@ export default defineConfig(({ mode }) => {
           }
         },
         // 外部依赖优化
-        external: (id) => {
+        external: () => {
           // 对于大型AI模型，考虑外部化处理
           return false;
         }
@@ -250,34 +250,38 @@ export default defineConfig(({ mode }) => {
         'react-router-dom',
         'zustand',
         'clsx',
-        'tailwind-merge'
+        'tailwind-merge',
+        'framer-motion',
+        '@headlessui/react',
+        '@heroicons/react/24/outline'
       ],
       exclude: [
-        '@xenova/transformers', // AI模型按需加载
         'workbox-window'
-      ]
+      ],
+      force: true
     },
     // Tree Shaking优化
     define: {
       __DEV__: process.env.NODE_ENV === 'development',
       __PROD__: process.env.NODE_ENV === 'production',
-      __VERSION__: JSON.stringify(process.env.npm_package_version || '1.0.0')
+      __VERSION__: JSON.stringify(process.env.npm_package_version || '1.0.0'),
+      global: 'globalThis'
     },
     worker: {
       format: 'es'
     },
-    // CDN配置
-    experimental: {
-      renderBuiltUrl(filename, { hostType }) {
-        if (hostType === 'js' && cdnConfig.enabled) {
-          return `${cdnConfig.domains.static}/assets/js/${filename}`;
-        }
-        if (hostType === 'css' && cdnConfig.enabled) {
-          return `${cdnConfig.domains.static}/assets/css/${filename}`;
-        }
-        return { relative: true };
-      }
-    },
+    // CDN配置 - 暂时禁用
+    // experimental: {
+    //   renderBuiltUrl(filename, { hostType }) {
+    //     if (hostType === 'js' && cdnConfig.enabled) {
+    //       return `${cdnConfig.domains.static}/assets/js/${filename}`;
+    //     }
+    //     if (hostType === 'css' && cdnConfig.enabled) {
+    //       return `${cdnConfig.domains.static}/assets/css/${filename}`;
+    //     }
+    //     return { relative: true };
+    //   }
+    // },
     // 服务器配置
     server: {
       host: true,
@@ -288,9 +292,13 @@ export default defineConfig(({ mode }) => {
       warmup: {
         clientFiles: [
           './src/main.tsx',
-          './src/App.tsx',
-          './src/pages/*.tsx'
+          './src/router/index.tsx',
+          './src/pages/HomePage.tsx'
         ]
+      },
+      headers: {
+        'Cross-Origin-Embedder-Policy': 'require-corp',
+        'Cross-Origin-Opener-Policy': 'same-origin'
       }
     },
     // 预览服务器配置

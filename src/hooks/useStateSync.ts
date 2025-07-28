@@ -15,9 +15,8 @@ export function useStateSync() {
   // Sync theme between app store and UI store
   useEffect(() => {
     const unsubscribe = useAppStore.subscribe(
-      (state) => state.theme,
-      (theme) => {
-        uiStore.updateChartPreferences({ theme });
+      (state) => {
+        uiStore.updateChartPreferences({ theme: state.theme });
       }
     );
     return unsubscribe;
@@ -26,13 +25,12 @@ export function useStateSync() {
   // Sync user preferences with app settings
   useEffect(() => {
     const unsubscribe = useUserStore.subscribe(
-      (state) => state.preferences,
-      (preferences) => {
-        if (preferences.theme !== appStore.theme) {
-          appStore.setTheme(preferences.theme);
+      (state) => {
+        if (state.preferences.theme !== appStore.theme) {
+          appStore.setTheme(state.preferences.theme);
         }
-        if (preferences.language !== appStore.language) {
-          appStore.setLanguage(preferences.language);
+        if (state.preferences.language !== appStore.language) {
+          appStore.setLanguage(state.preferences.language);
         }
       }
     );
@@ -42,14 +40,13 @@ export function useStateSync() {
   // Sync analysis completion with user history
   useEffect(() => {
     const unsubscribe = useAnalysisStore.subscribe(
-      (state) => state.currentAnalysis,
-      (currentAnalysis) => {
-        if (currentAnalysis && userStore.currentUser) {
+      (state) => {
+        if (state.currentAnalysis && userStore.currentUser) {
           const historyItem = {
-            id: currentAnalysis.id,
-            jobId: currentAnalysis.jobId,
-            result: currentAnalysis,
-            createdAt: currentAnalysis.createdAt,
+            id: state.currentAnalysis.id,
+            jobId: state.currentAnalysis.jobId,
+            result: state.currentAnalysis,
+            createdAt: state.currentAnalysis.createdAt,
           };
           userStore.addToHistory(historyItem);
         }
@@ -61,16 +58,15 @@ export function useStateSync() {
   // Sync job analysis with analysis store
   useEffect(() => {
     const unsubscribe = useJobStore.subscribe(
-      (state) => state.currentAnalysis,
-      (currentAnalysis) => {
-        if (currentAnalysis) {
+      (state) => {
+        if (state.currentAnalysis) {
           // Create match result from AI analysis
           const matchResult = {
-            overallScore: currentAnalysis.matchScore,
+            overallScore: state.currentAnalysis.matchScore,
             categoryScores: [],
             gaps: [],
-            strengths: currentAnalysis.suggestions.filter(s => s.includes('优势')),
-            recommendations: currentAnalysis.suggestions,
+            strengths: state.currentAnalysis.suggestions.filter((s: string) => s.includes('优势')),
+            recommendations: state.currentAnalysis.suggestions,
           };
           analysisStore.setCurrentMatchResult(matchResult);
         }
@@ -82,24 +78,21 @@ export function useStateSync() {
   // Sync loading states between stores
   useEffect(() => {
     const unsubscribeApp = useAppStore.subscribe(
-      (state) => state.isLoading,
-      (isLoading) => {
-        uiStore.setGlobalLoading(isLoading);
+      (state) => {
+        uiStore.setGlobalLoading(state.isLoading);
       }
     );
 
     const unsubscribeJob = useJobStore.subscribe(
-      (state) => state.isAnalyzing,
-      (isAnalyzing) => {
-        uiStore.setLoadingState('job-analysis', isAnalyzing);
-        analysisStore.setAnalyzing(isAnalyzing);
+      (state) => {
+        uiStore.setLoadingState('job-analysis', state.isAnalyzing);
+        analysisStore.setAnalyzing(state.isAnalyzing);
       }
     );
 
     const unsubscribeAnalysis = useAnalysisStore.subscribe(
-      (state) => state.isGeneratingResume,
-      (isGenerating) => {
-        uiStore.setLoadingState('resume-generation', isGenerating);
+      (state) => {
+        uiStore.setLoadingState('resume-generation', state.isGeneratingResume);
       }
     );
 

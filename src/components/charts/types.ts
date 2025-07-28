@@ -1,4 +1,4 @@
-import { MatchResult, CategoryScore, SkillGap } from '../../types';
+import { MatchResult } from '../../types';
 
 // Base chart configuration
 export interface ChartConfig {
@@ -54,7 +54,7 @@ export interface BarChartProps extends ChartProps {
   orientation?: 'horizontal' | 'vertical';
   showValues?: boolean;
   groupBy?: 'category' | 'priority';
-  sortBy?: 'value' | 'name' | 'category';
+  sortBy?: 'importance' | 'gap' | 'name';
 }
 
 // Trend chart specific props

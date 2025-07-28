@@ -8,35 +8,35 @@ const mockMatchResult: MatchResult = {
   overallScore: 78,
   categoryScores: [
     {
-      category: 'frontend',
+      category: 'frontend' as const,
       score: 85,
       maxScore: 100,
       skillCount: 12,
       matchedSkills: 10,
     },
     {
-      category: 'backend',
+      category: 'backend' as const,
       score: 72,
       maxScore: 100,
       skillCount: 8,
       matchedSkills: 6,
     },
     {
-      category: 'database',
+      category: 'database' as const,
       score: 65,
       maxScore: 100,
       skillCount: 6,
       matchedSkills: 4,
     },
     {
-      category: 'devops',
+      category: 'devops' as const,
       score: 58,
       maxScore: 100,
       skillCount: 5,
       matchedSkills: 3,
     },
     {
-      category: 'tools',
+      category: 'tools' as const,
       score: 80,
       maxScore: 100,
       skillCount: 10,
@@ -46,53 +46,43 @@ const mockMatchResult: MatchResult = {
   gaps: [
     {
       skill: 'React Hooks',
-      category: 'frontend',
+      category: 'frontend' as const,
       requiredLevel: 4,
       currentLevel: 2,
       importance: 0.9,
-      priority: 'high',
+      priority: 'high' as const,
     },
     {
       skill: 'Node.js',
-      category: 'backend',
+      category: 'backend' as const,
       requiredLevel: 4,
       currentLevel: 1,
       importance: 0.8,
-      priority: 'high',
+      priority: 'high' as const,
     },
     {
       skill: 'MongoDB',
-      category: 'database',
+      category: 'database' as const,
       requiredLevel: 3,
       currentLevel: 1,
       importance: 0.7,
-      priority: 'medium',
+      priority: 'medium' as const,
     },
     {
       skill: 'Docker',
-      category: 'devops',
+      category: 'devops' as const,
       requiredLevel: 3,
       currentLevel: 0,
       importance: 0.6,
-      priority: 'medium',
+      priority: 'medium' as const,
     },
   ],
   strengths: ['JavaScript', 'CSS', 'HTML', 'Git'],
   recommendations: [
-    {
-      type: 'skill-gap',
-      title: '提升React技能',
-      description: '建议深入学习React Hooks和状态管理',
-      priority: 'high',
-      actionable: true,
-    },
-    {
-      type: 'strength',
-      title: '前端基础扎实',
-      description: '在JavaScript和CSS方面表现优秀',
-      priority: 'medium',
-      actionable: false,
-    },
+    '建议深入学习React Hooks和状态管理',
+    '在JavaScript和CSS方面表现优秀',
+    '考虑学习Node.js来提升后端技能',
+    '建议学习Docker和容器化技术',
   ],
 };
 
@@ -193,7 +183,7 @@ const ChartExample: React.FC = () => {
               orientation="vertical"
               showValues={true}
               groupBy="category"
-              sortBy="value"
+              sortBy="importance"
               onDataPointClick={handleDataPointClick}
               onExport={handleExport}
             />

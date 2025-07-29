@@ -7,7 +7,6 @@ import type {
   AIWorkerMessage,
   AIWorkerResponse,
   AIEngineConfig,
-  ProgressUpdate,
   WorkerError as AIWorkerError
 } from './ai-worker';
 

@@ -73,7 +73,7 @@ export const PWAStatus: React.FC<PWAStatusProps> = ({ className = '' }) => {
   };
 
   const handleForceSync = async () => {
-    await offlineManager.forcSync();
+    await offlineManager.forceSync();
   };
 
   const handleClearCache = async () => {

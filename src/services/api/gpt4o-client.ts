@@ -1,6 +1,6 @@
 import 'openai/shims/node';
 import OpenAI from 'openai';
-import { AIAnalysisResult, Keyword, Skill } from '../../types';
+import { AIAnalysisResult, Keyword } from '../../types';
 
 export interface GPT4oConfig {
   apiKey: string;
@@ -27,7 +27,7 @@ export interface GPT4oResponse {
   processingTime: number;
 }
 
-export interface APIError {
+export interface APIErrorInfo {
   code: string;
   message: string;
   type: 'auth' | 'rate_limit' | 'quota' | 'network' | 'server' | 'validation';
@@ -286,13 +286,14 @@ export class GPT4oClient {
       return error;
     }
 
-    if (error instanceof OpenAI.APIError) {
+    if (error && typeof error === 'object' && 'status' in error) {
+      const openAIError = error as any;
       return new APIError({
-        code: error.code || 'OPENAI_ERROR',
-        message: error.message,
-        type: this.mapOpenAIErrorType(error),
-        retryable: this.isRetryableError(error),
-        retryAfter: this.getRetryAfter(error),
+        code: openAIError.code || 'OPENAI_ERROR',
+        message: openAIError.message || 'OpenAI API error',
+        type: this.mapOpenAIErrorType(openAIError),
+        retryable: this.isRetryableError(openAIError),
+        retryAfter: this.getRetryAfter(openAIError),
       });
     }
 
@@ -313,7 +314,7 @@ export class GPT4oClient {
     });
   }
 
-  private mapOpenAIErrorType(error: OpenAI.APIError): APIError['type'] {
+  private mapOpenAIErrorType(error: any): APIErrorInfo['type'] {
     if (error.status === 401) return 'auth';
     if (error.status === 429) return 'rate_limit';
     if (error.status === 402) return 'quota';
@@ -322,11 +323,11 @@ export class GPT4oClient {
     return 'network';
   }
 
-  private isRetryableError(error: OpenAI.APIError): boolean {
+  private isRetryableError(error: any): boolean {
     return error.status === 429 || error.status >= 500;
   }
 
-  private getRetryAfter(error: OpenAI.APIError): number | undefined {
+  private getRetryAfter(error: any): number | undefined {
     const retryAfter = error.headers?.['retry-after'];
     if (retryAfter) {
       return parseInt(retryAfter, 10) * 1000; // Convert to milliseconds
@@ -354,19 +355,13 @@ export class GPT4oClient {
 }
 
 // Custom APIError class
-class APIError extends Error {
+export class APIError extends Error {
   public readonly code: string;
-  public readonly type: APIError['type'];
+  public readonly type: APIErrorInfo['type'];
   public readonly retryable: boolean;
   public readonly retryAfter?: number;
 
-  constructor(params: {
-    code: string;
-    message: string;
-    type: APIError['type'];
-    retryable: boolean;
-    retryAfter?: number;
-  }) {
+  constructor(params: APIErrorInfo) {
     super(params.message);
     this.name = 'APIError';
     this.code = params.code;
@@ -375,5 +370,3 @@ class APIError extends Error {
     this.retryAfter = params.retryAfter;
   }
 }
-
-export { APIError };

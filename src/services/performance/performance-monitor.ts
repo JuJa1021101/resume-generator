@@ -109,7 +109,7 @@ export class PerformanceMonitor {
     const endTime = new Date();
     const startTime = new Date(endTime.getTime() - this.config.reportingInterval);
 
-    const report = await reportGenerator.generateReport(startTime, endTime);
+    await reportGenerator.generateReport(startTime, endTime);
 
     // Check for regressions and anomalies
     const entries = await performanceStorage.getEntries(startTime.getTime(), endTime.getTime());
@@ -181,7 +181,7 @@ export class PerformanceMonitor {
     metadata?: Record<string, unknown>
   ): Promise<void> {
     const entry: PerformanceEntry = {
-      id: `entry_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `entry_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
       timestamp: Date.now(),
       operation,
       duration,

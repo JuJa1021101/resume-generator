@@ -54,7 +54,7 @@ export class UpdateManager {
   /**
    * 处理更新可用事件
    */
-  private async handleUpdateAvailable(updateInfo: SWUpdateInfo): Promise<void> {
+  private async handleUpdateAvailable(_updateInfo: SWUpdateInfo): Promise<void> {
     const update: UpdateInfo = {
       isAvailable: true,
       version: await this.getNewVersion(),
@@ -319,7 +319,7 @@ export class UpdateManager {
   /**
    * 获取更新大小
    */
-  private async getUpdateSize(version?: string): Promise<number> {
+  private async getUpdateSize(_version?: string): Promise<number> {
     // 返回更新包大小（字节）
     return 2 * 1024 * 1024; // 2MB
   }
@@ -327,7 +327,7 @@ export class UpdateManager {
   /**
    * 检查是否为强制更新
    */
-  private async isForceUpdate(version?: string): Promise<boolean> {
+  private async isForceUpdate(_version?: string): Promise<boolean> {
     // 这里应该从服务器检查是否为强制更新
     return false;
   }

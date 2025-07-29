@@ -6,8 +6,7 @@ import {
   CategoryScore,
   SkillGap,
   DetailedScore,
-  ScoreBreakdown,
-  Recommendation
+  ScoreBreakdown
 } from '../../types';
 
 /**

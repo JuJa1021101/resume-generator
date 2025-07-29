@@ -3,8 +3,22 @@
  * 负责模型推理性能优化、内存管理和资源调度
  */
 
-import type { Pipeline } from '@xenova/transformers';
-import type { ModelMetadata, ModelPerformance } from './transformers-service';
+// import type { Pipeline } from '@xenova/transformers';
+import type { ModelMetadata } from './transformers-service';
+
+// 临时类型定义，避免导入错误
+type Pipeline = any;
+
+/**
+ * 创建带超时的Promise
+ */
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number, errorMessage = 'Operation timeout'): Promise<T> {
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    setTimeout(() => reject(new Error(errorMessage)), timeoutMs);
+  });
+
+  return Promise.race([promise, timeoutPromise]);
+}
 
 // 性能配置
 export interface PerformanceConfig {
@@ -112,13 +126,15 @@ export class PerformanceOptimizer {
       timeout?: number;
     } = {}
   ): Promise<any> {
-    return new Promise((resolve, reject) => {
+    const timeout = options.timeout || this.config.inferenceTimeout;
+
+    const taskPromise = new Promise((resolve, reject) => {
       const task: InferenceTask = {
         id: this.generateTaskId(),
         modelName,
         input,
         priority: options.priority || 'medium',
-        timeout: options.timeout || this.config.inferenceTimeout,
+        timeout,
         callback: resolve,
         errorCallback: reject,
         createdAt: new Date()
@@ -128,6 +144,9 @@ export class PerformanceOptimizer {
       this.insertTaskByPriority(task);
       this.updateMetrics();
     });
+
+    // 使用超时控制任务提交
+    return withTimeout(taskPromise, timeout, 'Task submission timeout');
   }
 
   /**
@@ -171,30 +190,47 @@ export class PerformanceOptimizer {
     const startTime = Date.now();
 
     try {
-      // 预处理输入
-      const optimizedInput = await this.preprocessInput(input, metadata);
-
-      // 应用量化优化
-      if (this.config.enableQuantization) {
-        await this.applyQuantization(model, metadata);
-      }
-
-      // 执行推理
-      const result = await this.executeInference(model, optimizedInput, metadata);
-
-      // 后处理结果
-      const optimizedResult = await this.postprocessResult(result, metadata);
+      // 使用超时控制整个推理过程
+      const inferencePromise = this.performOptimizedInference(model, input, metadata);
+      const result = await withTimeout(
+        inferencePromise,
+        this.config.inferenceTimeout,
+        'Model inference timeout'
+      );
 
       // 更新性能指标
       const inferenceTime = Date.now() - startTime;
       this.updateInferenceMetrics(inferenceTime, metadata);
 
-      return optimizedResult;
+      return result;
 
     } catch (error) {
       this.metrics.failedTasks++;
       throw error;
     }
+  }
+
+  /**
+   * 执行优化推理的内部方法
+   */
+  private async performOptimizedInference(
+    model: Pipeline,
+    input: string | string[],
+    metadata: ModelMetadata
+  ): Promise<any> {
+    // 预处理输入
+    const optimizedInput = await this.preprocessInput(input, metadata);
+
+    // 应用量化优化
+    if (this.config.enableQuantization) {
+      await this.applyQuantization(model, metadata);
+    }
+
+    // 执行推理
+    const result = await this.executeInference(model, optimizedInput, metadata);
+
+    // 后处理结果
+    return await this.postprocessResult(result, metadata);
   }
 
   /**
@@ -214,32 +250,15 @@ export class PerformanceOptimizer {
 
     const startTime = Date.now();
     const batchSize = Math.min(inputs.length, this.config.batchSize);
-    const results: any[] = [];
 
     try {
-      // 分批处理
-      for (let i = 0; i < inputs.length; i += batchSize) {
-        const batch = inputs.slice(i, i + batchSize);
-
-        // 批量预处理
-        const preprocessedBatch = await Promise.all(
-          batch.map(input => this.preprocessInput(input, metadata))
-        );
-
-        // 批量推理
-        const batchResults = await this.executeBatchInference(
-          model,
-          preprocessedBatch,
-          metadata
-        );
-
-        // 批量后处理
-        const postprocessedResults = await Promise.all(
-          batchResults.map(result => this.postprocessResult(result, metadata))
-        );
-
-        results.push(...postprocessedResults);
-      }
+      // 使用超时控制整个批量推理过程
+      const batchPromise = this.performBatchInference(model, inputs, metadata, batchSize);
+      const results = await withTimeout(
+        batchPromise,
+        this.config.inferenceTimeout * 2, // 批量推理允许更长时间
+        'Batch inference timeout'
+      );
 
       // 更新批处理效率指标
       const totalTime = Date.now() - startTime;
@@ -253,6 +272,44 @@ export class PerformanceOptimizer {
       this.metrics.failedTasks += inputs.length;
       throw error;
     }
+  }
+
+  /**
+   * 执行批量推理的内部方法
+   */
+  private async performBatchInference(
+    model: Pipeline,
+    inputs: string[],
+    metadata: ModelMetadata,
+    batchSize: number
+  ): Promise<any[]> {
+    const results: any[] = [];
+
+    // 分批处理
+    for (let i = 0; i < inputs.length; i += batchSize) {
+      const batch = inputs.slice(i, i + batchSize);
+
+      // 批量预处理
+      const preprocessedBatch = await Promise.all(
+        batch.map(input => this.preprocessInput(input, metadata))
+      );
+
+      // 批量推理
+      const batchResults = await this.executeBatchInference(
+        model,
+        preprocessedBatch,
+        metadata
+      );
+
+      // 批量后处理
+      const postprocessedResults = await Promise.all(
+        batchResults.map(result => this.postprocessResult(result, metadata))
+      );
+
+      results.push(...postprocessedResults);
+    }
+
+    return results;
   }
 
   /**
@@ -354,19 +411,19 @@ export class PerformanceOptimizer {
     const startTime = Date.now();
 
     try {
-      // 检查超时
-      const timeoutPromise = new Promise((_, reject) => {
+      // 创建超时Promise
+      const timeoutPromise = new Promise<never>((_, reject) => {
         setTimeout(() => reject(new Error('Task timeout')), task.timeout);
       });
 
-      // 这里需要实际的模型推理逻辑
-      // const result = await Promise.race([
-      //   this.performInference(task),
-      //   timeoutPromise
-      // ]);
+      // 创建推理Promise
+      const inferencePromise = this.performInference(task);
 
-      // 模拟推理结果
-      const result = { success: true, data: `Processed: ${task.input}` };
+      // 使用Promise.race来实现超时控制
+      const result = await Promise.race([
+        inferencePromise,
+        timeoutPromise
+      ]);
 
       task.callback(result);
       this.metrics.completedTasks++;
@@ -382,11 +439,22 @@ export class PerformanceOptimizer {
   }
 
   /**
+   * 执行推理任务
+   */
+  private async performInference(task: InferenceTask): Promise<any> {
+    // 模拟推理延迟
+    await new Promise(resolve => setTimeout(resolve, Math.random() * 2000 + 500));
+
+    // 模拟推理结果
+    return { success: true, data: `Processed: ${task.input}` };
+  }
+
+  /**
    * 预处理输入
    */
   private async preprocessInput(
     input: string | string[],
-    metadata: ModelMetadata
+    _metadata: ModelMetadata
   ): Promise<string | string[]> {
     if (typeof input === 'string') {
       // 文本预处理
@@ -405,9 +473,9 @@ export class PerformanceOptimizer {
    * 执行推理
    */
   private async executeInference(
-    model: Pipeline,
+    _model: Pipeline,
     input: string | string[],
-    metadata: ModelMetadata
+    _metadata: ModelMetadata
   ): Promise<any> {
     // 这里应该调用实际的模型推理
     // return await model(input);
@@ -421,9 +489,9 @@ export class PerformanceOptimizer {
    * 批量推理执行
    */
   private async executeBatchInference(
-    model: Pipeline,
+    _model: Pipeline,
     inputs: (string | string[])[],
-    metadata: ModelMetadata
+    _metadata: ModelMetadata
   ): Promise<any[]> {
     // 批量推理实现
     // return await model(inputs);
@@ -450,7 +518,7 @@ export class PerformanceOptimizer {
   /**
    * 应用量化优化
    */
-  private async applyQuantization(model: Pipeline, metadata: ModelMetadata): Promise<void> {
+  private async applyQuantization(_model: Pipeline, metadata: ModelMetadata): Promise<void> {
     if (!this.config.enableQuantization) {
       return;
     }
@@ -462,7 +530,7 @@ export class PerformanceOptimizer {
   /**
    * 生成预热输入
    */
-  private generateWarmupInputs(metadata: ModelMetadata): string[] {
+  private generateWarmupInputs(_metadata: ModelMetadata): string[] {
     const inputs = [
       'This is a test input for model warmup.',
       '这是一个用于模型预热的测试输入。',
@@ -495,7 +563,7 @@ export class PerformanceOptimizer {
    * 生成任务ID
    */
   private generateTaskId(): string {
-    return `task_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `task_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
   }
 
   /**

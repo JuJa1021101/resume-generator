@@ -2,7 +2,6 @@ import {
   UserSkill,
   RequiredSkill,
   MatchResult,
-  SkillCategory,
   Experience,
   Project
 } from '../../types';
@@ -225,7 +224,7 @@ export class ConfidenceCalculator {
 
     // 因子1: 用户技能数据完整性
     const completeUserSkills = userSkills.filter(skill =>
-      skill.name && skill.level > 0 && skill.category && skill.yearsOfExperience >= 0
+      skill.name && skill.level && skill.category && skill.yearsOfExperience >= 0
     );
     const userDataCompleteness = userSkills.length > 0 ? completeUserSkills.length / userSkills.length : 0;
     qualityScore += userDataCompleteness * 0.4;
@@ -321,7 +320,7 @@ export class ConfidenceCalculator {
 
       // 数据完整性建议
       const incompleteSkills = userSkills.filter(skill =>
-        !skill.name || skill.level === 0 || !skill.category
+        !skill.name || !skill.level || !skill.category
       );
       if (incompleteSkills.length > 0) {
         suggestions.push('完善技能信息，包括技能等级和分类');

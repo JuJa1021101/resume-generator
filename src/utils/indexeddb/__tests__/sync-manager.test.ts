@@ -138,7 +138,8 @@ describe('SyncManager', () => {
         skills: [],
         matchScore: 0.8,
         suggestions: [],
-        processingTime: 1000
+        processingTime: 1000,
+        confidence: 0.8
       }
     };
 
@@ -153,7 +154,19 @@ describe('SyncManager', () => {
         id: 'resume-1',
         userId: 'test-user-1',
         jobId: 'test-job-1',
-        content: 'Generated resume content',
+        content: {
+          personalInfo: {
+            name: 'Test User',
+            email: 'test@example.com',
+            phone: '123-456-7890',
+            location: 'Test City'
+          },
+          summary: 'Generated resume content',
+          skills: [],
+          experience: [],
+          education: [],
+          projects: []
+        },
         template: 'modern',
         createdAt: new Date(),
         updatedAt: new Date()

@@ -177,7 +177,6 @@ export class ResponseCache<T = AIAnalysisResult> {
    * Cleanup expired entries
    */
   cleanup(): number {
-    const now = Date.now();
     let removedCount = 0;
 
     for (const [key, entry] of this.cache.entries()) {

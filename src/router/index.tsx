@@ -15,7 +15,7 @@ export const routes = [
   {
     path: '/',
     element: <Layout />,
-    errorElement: <ErrorBoundary />,
+    errorElement: <ErrorBoundary><div>路由错误</div></ErrorBoundary>,
     children: [
       {
         index: true,
@@ -60,7 +60,6 @@ export const routes = [
 // Create router instance with future flags
 export const router = createBrowserRouter(routes, {
   future: {
-    v7_startTransition: true,
     v7_relativeSplatPath: true,
     v7_fetcherPersist: true,
     v7_normalizeFormMethod: true,

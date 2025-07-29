@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { UserPreferences, PerformanceMetrics } from '../types';
+import { PerformanceMetrics } from '../types';
 
 export interface AppState {
   // Application state

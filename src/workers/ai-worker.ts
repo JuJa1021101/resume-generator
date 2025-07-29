@@ -13,13 +13,7 @@ import type {
 } from '../types';
 
 import {
-  TransformersService,
-  createTransformersService,
-  getPerformanceOptimizer,
-  getResultFusionService,
-  type TransformersConfig,
-  type LocalAnalysisResult,
-  type FusedResult
+  TransformersService
 } from '../services/transformers';
 
 // Worker消息类型定义
@@ -118,7 +112,9 @@ class LRUCache<T> {
     // 如果缓存已满，删除最旧的项
     if (this.cache.size >= this.maxSize) {
       const firstKey = this.cache.keys().next().value;
-      this.cache.delete(firstKey);
+      if (firstKey) {
+        this.cache.delete(firstKey);
+      }
     }
 
     this.cache.set(key, { value, timestamp: Date.now() });
@@ -227,16 +223,8 @@ let transformersService: TransformersService | null = null;
 // 初始化Transformers.js服务
 async function initializeTransformersService(): Promise<TransformersService> {
   if (!transformersService) {
-    const config: TransformersConfig = {
-      modelName: 'Xenova/distilbert-base-multilingual-cased',
-      task: 'feature-extraction',
-      device: 'cpu',
-      quantized: true,
-      maxLength: 512,
-      temperature: 0.3
-    };
-
-    transformersService = createTransformersService(config);
+    transformersService = new TransformersService();
+    await transformersService.initialize();
     console.log('Transformers.js service initialized in worker');
   }
   return transformersService;
@@ -328,9 +316,8 @@ async function analyzeJD(id: string, content: string, config: AIEngineConfig): P
       const localResult = await service.analyzeJobDescription(content, {
         extractKeywords: true,
         analyzeSkills: true,
-        calculateMatch: false,
-        language: 'zh',
-        confidenceThreshold: 0.5
+        generateSuggestions: true,
+        language: 'zh-CN'
       });
 
       sendProgress(id, 'analyzing', 60, '本地AI分析中');
@@ -690,4 +677,11 @@ self.onmessage = async (event: MessageEvent<AIWorkerMessage>) => {
 };
 
 // 导出类型供主线程使用
-export type { AIWorkerMessage, AIWorkerResponse, AIEngineConfig, ProgressUpdate, WorkerError };
+// Export types (avoiding conflicts)
+export type {
+  AIWorkerMessage as WorkerMessage,
+  AIWorkerResponse as WorkerResponse,
+  AIEngineConfig as EngineConfig,
+  ProgressUpdate as Progress,
+  WorkerError as Error
+};

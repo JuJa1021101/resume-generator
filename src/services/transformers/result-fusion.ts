@@ -7,7 +7,6 @@ import type {
   AIAnalysisResult,
   Keyword,
   Skill,
-  MatchResult,
   PerformanceMetrics
 } from '../../types';
 import type { LocalAnalysisResult } from './transformers-service';
@@ -353,7 +352,7 @@ export class ResultFusionService {
   private selectiveFusion(
     localResult: LocalAnalysisResult,
     cloudResult: AIAnalysisResult,
-    config: FusionConfig
+    _config: FusionConfig
   ): FusedResult {
     // 根据置信度选择最佳结果的不同部分
     const useLocalKeywords = localResult.confidence > cloudResult.confidence;

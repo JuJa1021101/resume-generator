@@ -149,7 +149,7 @@ export class SimpleAnalyzer {
     console.log('SimpleAnalyzer: 开始关键词提取...');
 
     // 1. 技术技能关键词
-    Object.entries(SKILL_DATABASE).forEach(([category, config]) => {
+    Object.entries(SKILL_DATABASE).forEach(([, config]) => {
       config.skills.forEach(skill => {
         const patterns = [
           new RegExp(`\\b${skill.toLowerCase()}\\b`, 'g'),
@@ -361,7 +361,7 @@ export class SimpleAnalyzer {
   /**
    * 估算技能等级
    */
-  private estimateSkillLevel(skill: string, content: string): number {
+  private estimateSkillLevel(_skill: string, content: string): number {
     // 查找技能等级关键词
     for (const [level, keywords] of Object.entries(SKILL_LEVEL_KEYWORDS)) {
       if (keywords.some(keyword => content.includes(keyword))) {

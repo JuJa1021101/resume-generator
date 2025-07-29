@@ -1,5 +1,5 @@
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+// import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import PDFExporter from '../PDFExporter';
 import { ResumeContent } from '../../../types';
@@ -272,7 +272,7 @@ describe('PDFExporter', () => {
       const { PDFService } = require('../../../services/pdf/pdf-service');
       const mockService = new PDFService();
 
-      mockService.generateResume.mockImplementation(async (data, options, progressCallback) => {
+      mockService.generateResume.mockImplementation(async (_data: any, _options: any, progressCallback: any) => {
         if (progressCallback) {
           progressCallback({ stage: 'rendering', progress: 50, message: 'Rendering content...' });
         }
@@ -351,7 +351,7 @@ describe('PDFExporter', () => {
       const { PDFService } = require('../../../services/pdf/pdf-service');
       const mockService = new PDFService();
 
-      mockService.generateResume.mockImplementation(async (data, options, progressCallback) => {
+      mockService.generateResume.mockImplementation(async (_data: any, _options: any, progressCallback: any) => {
         if (progressCallback) {
           progressCallback({ stage: 'rendering', progress: 50, message: 'Rendering...' });
         }

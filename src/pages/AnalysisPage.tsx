@@ -40,8 +40,7 @@ export const AnalysisPage: React.FC = () => {
     }
   }, []);
 
-  // 检查是否需要API密钥
-  const needsApiKey = preferences.aiEngine === 'gpt4o' && !apiKey;
+
 
   const handleJDSubmit = useCallback(async (jdContent: string) => {
     // 检查GPT-4o是否需要API密钥
@@ -340,7 +339,11 @@ export const AnalysisPage: React.FC = () => {
                     技能匹配度雷达图
                   </h3>
                   <SkillRadarChart
-                    skills={analysisResult.skills}
+                    skills={analysisResult.skills.map(skill => ({
+                      ...skill,
+                      matched: false,
+                      requiredLevel: skill.level || 3
+                    }))}
                     className="w-full"
                   />
                 </div>
@@ -350,7 +353,11 @@ export const AnalysisPage: React.FC = () => {
                     关键技能分析
                   </h3>
                   <SkillBarChart
-                    skills={analysisResult.skills}
+                    skills={analysisResult.skills.map(skill => ({
+                      ...skill,
+                      matched: false,
+                      requiredLevel: skill.level || 3
+                    }))}
                     maxSkills={8}
                     className="w-full"
                   />
@@ -378,12 +385,12 @@ export const AnalysisPage: React.FC = () => {
                       </div>
                       <div className="flex items-center space-x-2">
                         <span className="text-sm text-gray-600">
-                          等级 {skill.requiredLevel}/5
+                          等级 {skill.level || 3}/5
                         </span>
                         <div className="w-16 bg-gray-200 rounded-full h-2">
                           <div
                             className="bg-blue-600 h-2 rounded-full"
-                            style={{ width: `${(skill.requiredLevel / 5) * 100}%` }}
+                            style={{ width: `${((skill.level || 3) / 5) * 100}%` }}
                           />
                         </div>
                       </div>

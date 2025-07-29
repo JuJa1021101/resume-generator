@@ -249,7 +249,8 @@ describe('IndexedDB Cache System Integration Tests', () => {
         skills: [],
         matchScore: 0.8,
         suggestions: [],
-        processingTime: 1000
+        processingTime: 1000,
+        confidence: 0.8
       }
     };
 

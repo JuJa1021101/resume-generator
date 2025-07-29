@@ -1,5 +1,6 @@
 // Performance monitoring service exports
 export { performanceMonitor } from './performance-monitor';
+import { performanceMonitor } from './performance-monitor';
 export { webVitalsMonitor } from './web-vitals-monitor';
 export { customMetricsCollector } from './custom-metrics-collector';
 export { performanceStorage } from './performance-storage';
@@ -28,7 +29,7 @@ export const createPerformanceDecorator = (
   name: string,
   metadata?: Record<string, unknown>
 ) => {
-  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+  return function (_target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (...args: any[]) {

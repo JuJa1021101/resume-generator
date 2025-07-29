@@ -1,6 +1,4 @@
 import {
-  UserSkill,
-  RequiredSkill,
   SkillGap,
   Recommendation,
   SkillCategory,

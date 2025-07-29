@@ -4,10 +4,6 @@
  */
 
 import type {
-  User,
-  JobDescription,
-  AnalysisResult,
-  AIAnalysisResult,
   PerformanceMetrics
 } from '../types';
 
@@ -263,14 +259,12 @@ class DatabaseManager {
       switch (operation.action) {
         case 'put':
           if (metadata) {
-            const dataWithMetadata = {
-              ...operation.data,
-              metadata: {
-                ...metadata,
+            const dataWithMetadata = Object.assign({}, operation.data, {
+              metadata: Object.assign({}, metadata, {
                 lastAccessed: new Date(),
                 accessCount: (metadata.accessCount || 0) + 1
-              }
-            };
+              })
+            });
             request = store.put(dataWithMetadata);
           } else {
             request = store.put(operation.data);
@@ -420,13 +414,12 @@ class DatabaseManager {
     const totalItems = storeStats.reduce((sum, store) => sum + store.itemCount, 0);
     const totalSize = storeStats.reduce((sum, store) => sum + store.size, 0);
 
-    this.stats = {
-      ...this.stats,
+    this.stats = Object.assign({}, this.stats, {
       totalSize,
       itemCount: totalItems,
       stores: storeStats,
       memoryUsage: this.estimateMemoryUsage()
-    };
+    });
 
     return this.stats;
   }
@@ -774,11 +767,11 @@ self.onbeforeunload = () => {
 
 // 导出类型供主线程使用
 export type {
-  CacheWorkerMessage,
-  CacheWorkerResponse,
-  CacheOperation,
-  CacheMetadata,
-  SyncConfig,
-  CacheStats,
-  CacheError
+  CacheWorkerMessage as CacheMessage,
+  CacheWorkerResponse as CacheResponse,
+  CacheOperation as CacheOp,
+  CacheMetadata as CacheMeta,
+  SyncConfig as SyncConf,
+  CacheStats as CacheStatistics,
+  CacheError as CacheErr
 };

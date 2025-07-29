@@ -87,7 +87,7 @@ export class BackgroundSyncManager {
    * 注册后台同步任务
    */
   async registerSync(task: Omit<BackgroundSyncTask, 'id' | 'createdAt' | 'retryCount'>): Promise<string> {
-    const taskId = `${task.type}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const taskId = `${task.type}-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
 
     const syncTask: BackgroundSyncTask = {
       ...task,
@@ -102,7 +102,12 @@ export class BackgroundSyncManager {
     // 如果支持后台同步，注册到Service Worker
     if (this.registration && 'sync' in this.registration) {
       try {
-        await this.registration.sync.register(taskId);
+        const syncManager = (this.registration as any).sync;
+        if (syncManager) {
+          await syncManager.register(taskId);
+        } else {
+          this.executeTask(syncTask);
+        }
       } catch (error) {
         console.error('Failed to register background sync:', error);
         // 降级到立即执行
@@ -152,10 +157,8 @@ export class BackgroundSyncManager {
   /**
    * 执行AI分析任务
    */
-  private async executeAIAnalysis(task: BackgroundSyncTask): Promise<SyncResult> {
-    const { jobDescription, userSkills } = task.data;
-
-    // 这里应该调用AI分析服务
+  private async executeAIAnalysis(_task: BackgroundSyncTask): Promise<SyncResult> {
+    // 这里应该调用AI分析服务，使用 _task.data 中的数据
     // 为了演示，我们模拟一个异步操作
     await new Promise(resolve => setTimeout(resolve, 2000));
 
@@ -172,10 +175,8 @@ export class BackgroundSyncManager {
   /**
    * 执行PDF生成任务
    */
-  private async executePDFGeneration(task: BackgroundSyncTask): Promise<SyncResult> {
-    const { resumeData, template } = task.data;
-
-    // 这里应该调用PDF生成服务
+  private async executePDFGeneration(_task: BackgroundSyncTask): Promise<SyncResult> {
+    // 这里应该调用PDF生成服务，使用 _task.data 中的数据
     await new Promise(resolve => setTimeout(resolve, 3000));
 
     return {
@@ -209,9 +210,9 @@ export class BackgroundSyncManager {
    * 执行模型更新任务
    */
   private async executeModelUpdate(task: BackgroundSyncTask): Promise<SyncResult> {
-    const { modelUrl, version } = task.data;
+    const { version } = task.data;
 
-    // 这里应该下载和更新AI模型
+    // 这里应该下载和更新AI模型，使用 task.data 中的数据
     await new Promise(resolve => setTimeout(resolve, 5000));
 
     return {

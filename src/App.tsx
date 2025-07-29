@@ -26,7 +26,7 @@ function App() {
     markGuideCompleted,
     isGuideCompleted
   } = useUserGuide();
-  const { errors } = useErrorHandler();
+  const { } = useErrorHandler();
 
   // Initialize state sync
   useStateSync();

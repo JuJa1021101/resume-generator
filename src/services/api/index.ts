@@ -15,7 +15,7 @@ export { ResponseCache, PersistentResponseCache } from './response-cache';
 export type { CacheEntry, CacheConfig, CacheStats } from './response-cache';
 
 // Utility functions
-export const createDefaultConfig = (apiKey: string): GPT4oServiceConfig => ({
+export const createDefaultConfig = (apiKey: string) => ({
   apiKey,
   maxTokens: 2000,
   temperature: 0.3,

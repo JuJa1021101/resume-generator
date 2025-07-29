@@ -2,7 +2,7 @@
  * 离线模式管理器
  */
 
-import { cacheService } from '@/utils/indexeddb';
+// import { cacheService } from '@/utils/indexeddb';
 
 export interface OfflineQueueItem {
   id: string;
@@ -80,7 +80,7 @@ export class OfflineManager {
   async addToSyncQueue(item: Omit<OfflineQueueItem, 'id' | 'timestamp' | 'retryCount'>): Promise<void> {
     const queueItem: OfflineQueueItem = {
       ...item,
-      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
       timestamp: Date.now(),
       retryCount: 0
     };
@@ -158,7 +158,8 @@ export class OfflineManager {
 
     // 缓存响应结果
     const result = await response.json();
-    await cacheService.set(`api-${item.id}`, result);
+    // await cacheService.set(`api-${item.id}`, result);
+    console.log('API request processed:', result);
   }
 
   /**
@@ -264,7 +265,7 @@ export class OfflineManager {
   /**
    * 手动触发同步
    */
-  async forcSync(): Promise<void> {
+  async forceSync(): Promise<void> {
     if (this.isOnline) {
       await this.processSyncQueue();
       this.updateLastSyncTime();

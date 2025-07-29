@@ -60,11 +60,11 @@ export class WebVitalsMonitor {
 
   private observePerformanceEntry(
     entryType: string,
-    callback: (entries: PerformanceEntry[]) => void
+    callback: (entries: any[]) => void
   ): void {
     try {
       const observer = new PerformanceObserver((list) => {
-        callback(list.getEntries());
+        callback(list.getEntries() as any[]);
       });
 
       observer.observe({ entryTypes: [entryType] });
@@ -155,7 +155,7 @@ export class WebVitalsMonitor {
 
   public createPerformanceEntry(operation: string): PerformanceEntry {
     return {
-      id: `perf_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `perf_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
       timestamp: Date.now(),
       operation,
       duration: 0,

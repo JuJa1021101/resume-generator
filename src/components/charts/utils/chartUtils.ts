@@ -100,8 +100,8 @@ export const transformToCategoryComparison = (
   const scores = categoryScores.map(score =>
     Math.round((score.score / score.maxScore) * 100)
   );
-  const matchedCounts = categoryScores.map(score => score.matchedSkills);
-  const totalCounts = categoryScores.map(score => score.skillCount);
+  // const matchedCounts = categoryScores.map(score => score.matchedSkills);
+  // const totalCounts = categoryScores.map(score => score.skillCount);
 
   const colors = generateColorPalette(categoryScores.length, theme, 'primary');
 

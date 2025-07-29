@@ -3,6 +3,9 @@
  * 导出所有Worker相关的类型、工具和管理器
  */
 
+import { getWorkerManager, type WorkerManager } from './worker-manager';
+import type { AIEngineConfig } from './ai-worker';
+
 // Worker管理器
 export {
   WorkerManager,
@@ -14,22 +17,23 @@ export {
 export type {
   AIWorkerMessage,
   AIWorkerResponse,
-  AIEngineConfig,
   ProgressUpdate,
   WorkerError as AIWorkerError,
   BatchProcessData,
   BatchProcessResult
 } from './ai-worker';
 
+export type { AIEngineConfig } from './ai-worker';
+
 // Cache Worker类型和接口
 export type {
-  CacheWorkerMessage,
-  CacheWorkerResponse,
-  CacheOperation,
-  CacheMetadata,
-  SyncConfig,
-  CacheStats,
-  CacheError
+  CacheMessage as CacheWorkerMessage,
+  CacheResponse as CacheWorkerResponse,
+  CacheOp as CacheOperation,
+  CacheMeta as CacheMetadata,
+  SyncConf as SyncConfig,
+  CacheStatistics as CacheStats,
+  CacheErr as CacheError
 } from './cache-worker';
 
 // Worker管理器类型
@@ -206,6 +210,7 @@ export class WorkerService {
     this.workerManager.clearErrorLog();
 
     // 清理性能监控数据
+    const { performanceMonitor } = await import('./worker-utils');
     performanceMonitor.clear();
 
     return { optimized: true, timestamp: new Date() };

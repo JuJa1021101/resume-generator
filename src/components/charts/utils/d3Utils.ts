@@ -6,7 +6,7 @@ export const createResponsiveSVG = (
   container: HTMLElement,
   width: number,
   height: number,
-  margins: D3ChartMargins
+  _margins: D3ChartMargins
 ): d3.Selection<SVGSVGElement, unknown, null, undefined> => {
   // Remove existing SVG
   d3.select(container).select('svg').remove();
@@ -68,7 +68,7 @@ export const createAxes = (
   chartGroup: d3.Selection<SVGGElement, unknown, null, undefined>,
   xScale: any,
   yScale: d3.ScaleLinear<number, number>,
-  width: number,
+  _width: number,
   height: number,
   theme: ChartTheme
 ) => {
@@ -199,7 +199,7 @@ export const createRadarPathGenerator = (
   angleSlice: number
 ) => {
   return d3.lineRadial<number>()
-    .angle((d, i) => i * angleSlice)
+    .angle((_d, i) => i * angleSlice)
     .radius(d => d * radius)
     .curve(d3.curveLinearClosed);
 };
@@ -243,7 +243,7 @@ export const createLegend = (
     .enter()
     .append('g')
     .attr('class', 'legend-item')
-    .attr('transform', (d, i) => `translate(0, ${i * 20})`);
+    .attr('transform', (_d, i) => `translate(0, ${i * 20})`);
 
   legendItems.append('rect')
     .attr('width', 12)

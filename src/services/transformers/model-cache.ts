@@ -3,8 +3,11 @@
  * 负责模型的加载、缓存、版本管理和性能优化
  */
 
-import { Pipeline } from '@xenova/transformers';
-import type { ModelMetadata, ModelPerformance } from './transformers-service';
+// import { Pipeline } from '@xenova/transformers';
+import type { ModelMetadata } from './transformers-service';
+
+// 临时类型定义，避免导入错误
+type Pipeline = any;
 
 // 缓存配置
 export interface CacheConfig {
@@ -281,7 +284,7 @@ export class ModelCacheManager {
       // 这里应该实现IndexedDB存储逻辑
       // 由于模型对象复杂，可能需要序列化处理
 
-      const serializedData = {
+      const _serializedData = {
         key,
         metadata: cacheItem.metadata,
         lastAccessed: cacheItem.lastAccessed,

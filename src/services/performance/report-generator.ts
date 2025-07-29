@@ -26,7 +26,7 @@ export class ReportGenerator {
     const customMetrics = customMetricsCollector.getMetrics();
     const benchmarkResults = await benchmarkRunner.runBenchmarks(entries);
 
-    const summary = this.generateSummary(entries, benchmarkResults);
+    const summary = await this.generateSummary(entries, benchmarkResults);
     const recommendations = this.generateRecommendations(
       entries,
       benchmarkResults,
@@ -35,7 +35,7 @@ export class ReportGenerator {
     );
 
     const report: PerformanceReport = {
-      id: `report_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `report_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
       generatedAt: new Date(),
       timeRange: { start: startTime, end: endTime },
       summary,
@@ -52,13 +52,12 @@ export class ReportGenerator {
     return report;
   }
 
-  private generateSummary(
+  private async generateSummary(
     entries: PerformanceEntry[],
     benchmarkResults: PerformanceBenchmarkResult[]
-  ): PerformanceSummary {
+  ): Promise<PerformanceSummary> {
     const loadTimeEntries = entries.filter(e => e.operation === 'page-load');
     const aiProcessingEntries = entries.filter(e => e.operation === 'ai-processing');
-    const cacheEntries = entries.filter(e => e.operation === 'cache-operation');
 
     const averageLoadTime = loadTimeEntries.length > 0
       ? loadTimeEntries.reduce((sum, e) => sum + e.duration, 0) / loadTimeEntries.length

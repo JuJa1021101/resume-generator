@@ -17,7 +17,7 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({
   onDismiss
 }) => {
   const [showPrompt, setShowPrompt] = useState(false);
-  const [installationState, setInstallationState] = useState<string>('not-installable');
+  const [, setInstallationState] = useState<string>('not-installable');
   const [isInstalling, setIsInstalling] = useState(false);
 
   useEffect(() => {

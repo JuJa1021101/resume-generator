@@ -86,19 +86,24 @@ export class NotificationManager {
     }
 
     if (this.registration) {
-      // 使用Service Worker显示通知
-      await this.registration.showNotification(options.title, {
+      // 使用Service Worker显示通知（支持 actions）
+      const swNotificationOptions: any = {
         body: options.body,
         icon: options.icon || '/pwa-192x192.png',
         badge: options.badge || '/pwa-192x192.png',
         tag: options.tag,
         data: options.data,
-        actions: options.actions,
         requireInteraction: options.requireInteraction,
         silent: options.silent
-      });
+      };
+
+      if (options.actions) {
+        swNotificationOptions.actions = options.actions;
+      }
+
+      await this.registration.showNotification(options.title, swNotificationOptions);
     } else {
-      // 降级到浏览器通知
+      // 降级到浏览器通知（不支持 actions）
       new Notification(options.title, {
         body: options.body,
         icon: options.icon || '/pwa-192x192.png',

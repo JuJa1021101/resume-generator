@@ -1,5 +1,5 @@
 import jsPDF from 'jspdf';
-import { UserProfile, GeneratedResume, ResumeContent } from '../../types';
+import { ResumeContent } from '../../types';
 
 export type ResumeTemplate = 'modern' | 'classic' | 'creative';
 

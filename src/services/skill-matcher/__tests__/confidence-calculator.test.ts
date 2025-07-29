@@ -315,7 +315,7 @@ describe('ConfidenceCalculator', () => {
 
     it('should suggest data completeness improvement for incomplete skills', () => {
       const userSkills: UserSkill[] = [
-        { name: '', level: 0, category: 'frontend', yearsOfExperience: 0, certifications: [] } as UserSkill,
+        { name: '', level: 1, category: 'frontend', yearsOfExperience: 0, certifications: [] } as UserSkill,
         createUserSkill('React', 3, 'frontend', 2)
       ];
 

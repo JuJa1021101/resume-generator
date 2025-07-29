@@ -24,7 +24,6 @@ const DEFAULT_STORAGE_KEY = 'user-guide-progress';
 export function useUserGuide(options: UseUserGuideOptions = {}): UseUserGuideReturn {
   const {
     storageKey = DEFAULT_STORAGE_KEY,
-    autoStart = false,
     skipIfCompleted = true,
   } = options;
 

@@ -17,7 +17,12 @@ export interface ChunkedData {
   totalChunks: number;
   currentChunk: number;
   data: ArrayBuffer | string;
-  metadata?: unknown;
+  metadata?: {
+    originalSize?: number;
+    options?: TransferOptions;
+    createdAt?: number;
+    [key: string]: unknown;
+  };
 }
 
 export interface CompressionResult {
@@ -72,7 +77,7 @@ export class DataSerializer {
   /**
    * JSON序列化替换器 - 处理特殊类型
    */
-  private static replacer(key: string, value: unknown): unknown {
+  private static replacer(_key: string, value: unknown): unknown {
     if (value instanceof Date) {
       return { __type: 'Date', value: value.toISOString() };
     }
@@ -104,7 +109,7 @@ export class DataSerializer {
   /**
    * JSON反序列化恢复器 - 恢复特殊类型
    */
-  private static reviver(key: string, value: unknown): unknown {
+  private static reviver(_key: string, value: unknown): unknown {
     if (typeof value === 'object' && value !== null && '__type' in value) {
       const typedValue = value as { __type: string; value: unknown };
 
@@ -211,7 +216,6 @@ export class DataSerializer {
 // 分块传输管理器
 export class ChunkManager {
   private chunks = new Map<string, Map<number, ChunkedData>>();
-  private assembledData = new Map<string, unknown>();
 
   /**
    * 将大数据分块
@@ -241,7 +245,11 @@ export class ChunkManager {
         totalChunks,
         currentChunk: i,
         data: chunkData,
-        metadata: i === 0 ? { originalSize: totalSize, options } : undefined
+        metadata: i === 0 ? {
+          originalSize: totalSize,
+          options,
+          createdAt: Date.now()
+        } : undefined
       });
     }
 
@@ -300,7 +308,7 @@ export class ChunkManager {
 
     // 获取原始选项
     const firstChunk = sortedChunks[0];
-    const options = firstChunk.metadata?.options as TransferOptions || {};
+    const options = firstChunk.metadata?.options || {};
 
     // 反序列化
     if (options.compress) {
@@ -327,7 +335,7 @@ export class ChunkManager {
     for (const [id, chunkMap] of this.chunks.entries()) {
       const firstChunk = chunkMap.values().next().value as ChunkedData;
       if (firstChunk && firstChunk.metadata) {
-        const createdAt = (firstChunk.metadata as any).createdAt || 0;
+        const createdAt = firstChunk.metadata.createdAt || 0;
         if (now - createdAt > maxAge) {
           this.chunks.delete(id);
         }

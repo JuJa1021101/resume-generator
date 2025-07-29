@@ -3,10 +3,8 @@
  */
 
 import {
-  JobDescription,
   AIAnalysisResult,
   Keyword,
-  Skill,
   RequiredSkill,
   JobRequirement,
   SkillCategory,
@@ -165,7 +163,6 @@ export class JDAnalyzer {
    * 提取职位基本信息
    */
   private extractJobInfo(content: string): JDAnalysisResult['jobInfo'] {
-    const lines = content.split('\n').filter(line => line.trim());
 
     // 提取职位标题
     const titlePatterns = [
@@ -254,7 +251,6 @@ export class JDAnalyzer {
    */
   private extractTechKeywords(content: string): Keyword[] {
     const keywords: Keyword[] = [];
-    const lowerContent = content.toLowerCase();
 
     Object.entries(SKILL_KEYWORDS_MAP).forEach(([skill, config]) => {
       config.aliases.forEach(alias => {
@@ -372,7 +368,7 @@ export class JDAnalyzer {
             name: keyword.text,
             importance: keyword.importance,
             category: skillConfig.category,
-            requiredLevel: this.estimateRequiredLevel(keyword, content)
+            level: this.estimateRequiredLevel(keyword, content)
           });
         }
       }
@@ -412,7 +408,7 @@ export class JDAnalyzer {
     const requirements: JobRequirement[] = [];
     const lines = content.split('\n').filter(line => line.trim());
 
-    lines.forEach((line, index) => {
+    lines.forEach((line) => {
       const trimmedLine = line.trim();
 
       // 识别要求相关的行
@@ -599,7 +595,7 @@ export class JDAnalyzer {
    * 生成分析ID
    */
   private generateAnalysisId(): string {
-    return `jd_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `jd_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
   }
 
   /**

@@ -189,7 +189,7 @@ export class PerformanceStorage {
     if (!this.db) throw new Error('Database not initialized');
 
     try {
-      await this.db.put('config', { key: 'performance-config', ...config });
+      await this.db.put('config', config, 'performance-config');
     } catch (error) {
       console.error('Failed to store performance config:', error);
       throw error;
@@ -201,11 +201,7 @@ export class PerformanceStorage {
 
     try {
       const result = await this.db.get('config', 'performance-config');
-      if (result) {
-        const { key, ...config } = result;
-        return config as PerformanceConfig;
-      }
-      return null;
+      return result || null;
     } catch (error) {
       console.error('Failed to get performance config:', error);
       return null;

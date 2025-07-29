@@ -8,6 +8,11 @@ export { notificationManager, NotificationManager } from './notification-manager
 export { backgroundSyncManager, BackgroundSyncManager } from './background-sync';
 export { updateManager, UpdateManager } from './update-manager';
 
+// 导入实例用于内部使用
+import { swManager } from './sw-manager';
+import { offlineManager } from './offline-manager';
+import { updateManager } from './update-manager';
+
 export type { SWUpdateInfo, SWInstallPrompt } from './sw-manager';
 export type { OfflineQueueItem, SyncStatus } from './offline-manager';
 export type { NotificationOptions, NotificationAction, PushSubscriptionInfo } from './notification-manager';

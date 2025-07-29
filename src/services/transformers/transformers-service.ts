@@ -18,6 +18,30 @@ export interface AnalysisOptions {
   language: 'zh-CN' | 'en-US';
 }
 
+// 本地分析结果
+export interface LocalAnalysisResult extends AIAnalysisResult {
+  localProcessing: boolean;
+}
+
+// 模型元数据
+export interface ModelMetadata {
+  name: string;
+  size: number;
+  version: string;
+  task: string;
+  language: string;
+  loadedAt: Date;
+  performance: ModelPerformance;
+}
+
+// 模型性能
+export interface ModelPerformance {
+  loadTime: number;
+  inferenceTime: number;
+  memoryUsage: number;
+  accuracy: number;
+}
+
 // 技能关键词数据库
 const SKILL_DATABASE = {
   frontend: [
@@ -118,7 +142,7 @@ export class TransformersService {
     analyzeSkills: true,
     generateSuggestions: true,
     language: 'zh-CN'
-  }): Promise<AIAnalysisResult> {
+  }): Promise<LocalAnalysisResult> {
     const startTime = performance.now();
 
     try {
@@ -127,13 +151,14 @@ export class TransformersService {
       // 确保已初始化
       await this.initialize();
 
-      const results: AIAnalysisResult = {
+      const results: LocalAnalysisResult = {
         keywords: [],
         skills: [],
         matchScore: 0,
         suggestions: [],
         processingTime: 0,
-        confidence: 0.8
+        confidence: 0.8,
+        localProcessing: true
       };
 
       // 1. 提取关键词
@@ -181,7 +206,8 @@ export class TransformersService {
         matchScore: 0,
         suggestions: ['AI分析暂时不可用，请稍后重试'],
         processingTime: performance.now() - startTime,
-        confidence: 0
+        confidence: 0,
+        localProcessing: true
       };
     }
   }
@@ -246,7 +272,7 @@ export class TransformersService {
     const lowerContent = content.toLowerCase();
 
     // 1. 技术技能关键词
-    Object.entries(SKILL_DATABASE).forEach(([category, skills]) => {
+    Object.entries(SKILL_DATABASE).forEach(([, skills]) => {
       skills.forEach(skill => {
         const patterns = [
           new RegExp(`\\b${skill.toLowerCase()}\\b`, 'g'),
@@ -316,7 +342,7 @@ export class TransformersService {
   /**
    * 基于语义向量增强关键词
    */
-  private enhanceKeywordsWithEmbeddings(text: string, embeddings: any, keywordMap: Map<string, any>): void {
+  private enhanceKeywordsWithEmbeddings(text: string, _embeddings: any, keywordMap: Map<string, any>): void {
     // 这里可以实现更复杂的语义分析
     // 目前简化处理，主要用于权重调整
     const semanticBoost = 0.1;

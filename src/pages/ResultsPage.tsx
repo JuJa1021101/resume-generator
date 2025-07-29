@@ -56,8 +56,8 @@ export const ResultsPage: React.FC = () => {
   }
 
   const overallScore = Math.round(analysisResult.aiAnalysis.matchScore * 100);
-  const techSkills = analysisResult.skills.filter(s => s.category !== 'soft');
-  const softSkills = analysisResult.skills.filter(s => s.category === 'soft');
+  const techSkills = analysisResult.skills.filter(s => s.category !== 'soft-skills');
+  const softSkills = analysisResult.skills.filter(s => s.category === 'soft-skills');
   const techScore = techSkills.length > 0
     ? Math.round(techSkills.reduce((sum, s) => sum + s.importance, 0) / techSkills.length * 100)
     : 0;
@@ -88,7 +88,11 @@ export const ResultsPage: React.FC = () => {
             </h2>
             {analysisResult.skills.length > 0 ? (
               <SkillRadarChart
-                skills={analysisResult.skills}
+                skills={analysisResult.skills.map(skill => ({
+                  ...skill,
+                  matched: false,
+                  requiredLevel: skill.level || 3
+                }))}
                 className="w-full"
               />
             ) : (
@@ -104,7 +108,11 @@ export const ResultsPage: React.FC = () => {
             </h2>
             {analysisResult.skills.length > 0 ? (
               <SkillBarChart
-                skills={analysisResult.skills}
+                skills={analysisResult.skills.map(skill => ({
+                  ...skill,
+                  matched: false,
+                  requiredLevel: skill.level || 3
+                }))}
                 maxSkills={10}
                 className="w-full"
               />

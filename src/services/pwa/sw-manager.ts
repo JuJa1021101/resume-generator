@@ -33,12 +33,12 @@ export class ServiceWorkerManager {
       this.wb = new Workbox('/sw.js');
 
       // 监听更新事件
-      this.wb.addEventListener('waiting', (event) => {
+      this.wb.addEventListener('waiting', (event: any) => {
         if (this.updateCallback) {
           this.updateCallback({
             isUpdateAvailable: true,
             skipWaiting: () => this.skipWaiting(),
-            registration: event.sw
+            registration: event.sw as ServiceWorkerRegistration
           });
         }
       });

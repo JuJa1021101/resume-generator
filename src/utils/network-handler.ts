@@ -1,4 +1,4 @@
-import { errorHandler, ErrorType } from './error-handler';
+import { errorHandler } from './error-handler';
 
 export interface NetworkStatus {
   isOnline: boolean;
@@ -102,7 +102,7 @@ export class NetworkHandler {
       clearTimeout(timeoutId);
 
       if (error instanceof Error) {
-        const errorId = errorHandler.handleError(error, {
+        errorHandler.handleError(error, {
           component: 'NetworkHandler',
           action: 'fetch',
           additionalData: { url, method: options.method || 'GET' },
@@ -155,7 +155,9 @@ export class NetworkHandler {
     if (this.requestQueue.size >= this.maxQueueSize) {
       // Remove oldest request
       const oldestId = this.requestQueue.keys().next().value;
-      this.requestQueue.delete(oldestId);
+      if (oldestId) {
+        this.requestQueue.delete(oldestId);
+      }
     }
 
     const requestId = this.generateRequestId();
@@ -228,7 +230,7 @@ export class NetworkHandler {
   }
 
   private generateRequestId(): string {
-    return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `req_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
   }
 
   addStatusListener(listener: (status: NetworkStatus) => void): void {

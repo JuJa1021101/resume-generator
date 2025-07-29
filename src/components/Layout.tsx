@@ -14,7 +14,11 @@ import { useUIStore } from '../stores/ui-store';
 import { useAppStore } from '../stores/app-store';
 import { useNavigation } from '../hooks/useNavigation';
 
-export const Layout: React.FC = () => {
+interface LayoutProps {
+  children?: React.ReactNode;
+}
+
+export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { sidebarOpen, setSidebarOpen, notifications } = useUIStore();
   const { theme, setTheme, language, setLanguage } = useAppStore();
   const { isCurrentPath } = useNavigation();
@@ -156,7 +160,7 @@ export const Layout: React.FC = () => {
 
       {/* Main Content */}
       <main className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20 md:pb-8 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-        <Outlet />
+        {children || <Outlet />}
       </main>
 
       {/* Mobile Navigation */}
